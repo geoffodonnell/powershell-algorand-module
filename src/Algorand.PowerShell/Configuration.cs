@@ -10,7 +10,7 @@ namespace Algorand.PowerShell {
 		public static readonly string ConfigurationFileName = "config.json";
 		public static readonly string AccountsDatabaseName = "accounts.kdbx";
 
-		public static AccountStore? AccountStore { get; set; }
+		public static AccountStore AccountStore { get; set; }
 
 		public static string ConfigurationDirectory { get; private set; }
 

@@ -26,6 +26,7 @@ namespace Algorand.PowerShell {
 		private PwDatabase mDatabase;
 
 		public AccountStore(string filePath) {
+
 			mStatusLogger = new NullStatusLogger();
 			mFilePath = filePath;
 			mDatabase = null;
@@ -35,6 +36,11 @@ namespace Algorand.PowerShell {
 
 			if (String.IsNullOrEmpty(password)) {
 				throw new ArgumentNullException("password");
+			}
+
+			if (mDatabase != null) {
+				throw new InvalidOperationException(
+					$"AccountStore is already open, call {nameof(Close)} first.");
 			}
 
 			try {
@@ -58,6 +64,12 @@ namespace Algorand.PowerShell {
 				mDatabase = null;
 				throw;
 			}
+		}
+
+		public virtual void Close() {
+
+			mDatabase?.Close();
+			mDatabase = null;
 		}
 
 		public virtual IEnumerator<Account> GetEnumerator() {
