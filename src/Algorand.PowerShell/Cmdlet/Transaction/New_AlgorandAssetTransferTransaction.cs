@@ -6,16 +6,13 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetTransferTransaction")]
 	public class New_AlgorandAssetTransferTransaction : NewTransactionBase {
 
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = true)]
 		public ulong? XferAsset { get; set; }
 
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = true)]
 		public ulong? AssetAmount { get; set; }
 
-		[Parameter(Mandatory = false)]
-		public Address AssetSender { get; set; }
-
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = true)]
 		public Address AssetReceiver { get; set; }
 
 		[Parameter(Mandatory = false)]
@@ -27,7 +24,6 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			result.xferAsset = XferAsset;
 			result.assetAmount = AssetAmount;
-			result.assetSender = AssetSender;
 			result.assetReceiver = AssetReceiver;
 			result.assetCloseTo = AssetCloseTo;
 
