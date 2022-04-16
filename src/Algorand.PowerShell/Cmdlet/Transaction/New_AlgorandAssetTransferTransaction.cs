@@ -23,7 +23,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.KeyRegistration);
+			var result = CreateTransaction(TxType.AssetTransfer);
 
 			result.xferAsset = XferAsset;
 			result.assetAmount = AssetAmount;
