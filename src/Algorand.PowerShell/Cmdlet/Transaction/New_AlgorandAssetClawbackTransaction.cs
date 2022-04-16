@@ -34,8 +34,6 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			WriteObject(result);
 		}
 
-
 	}
-
 
 }
