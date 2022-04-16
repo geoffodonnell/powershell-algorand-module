@@ -1,4 +1,5 @@
 ﻿using Algorand.V2.Indexer.Model;
+using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -10,7 +11,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Lookup",
 			Mandatory = true,
 			ValueFromPipeline = true )]
-		public string? AccountId { get; set; }
+		public string AccountId { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -28,7 +29,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? Next { get; set; }
+		public string Next { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -46,7 +47,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? AuthAddr { get; set; }
+		public string AuthAddr { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -67,7 +68,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public ExcludeType[]? Exclude { get; set; }
+		public ExcludeType[] Exclude { get; set; }
 
 		protected override void ProcessRecord() {
 

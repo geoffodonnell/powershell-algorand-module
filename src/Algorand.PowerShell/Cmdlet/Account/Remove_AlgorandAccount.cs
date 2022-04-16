@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Account {
 
@@ -6,7 +7,7 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 	public class Remove_AlgorandAccount : CmdletBase {
 
 		[Parameter(Mandatory = true, ValueFromPipeline = true)]
-		public Algorand.Account? Account { get; set; }
+		public Algorand.Account Account { get; set; }
 
 		protected override void ProcessRecord() {
 

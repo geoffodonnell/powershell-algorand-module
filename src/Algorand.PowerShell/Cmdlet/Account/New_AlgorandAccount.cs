@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Account {
 
@@ -6,7 +7,7 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 	public class New_AlgorandAccount : CmdletBase {
 
 		[Parameter(Mandatory = false, ValueFromPipeline = true)]
-		public string? Mnemonic { get; set; }
+		public string Mnemonic { get; set; }
 
 		protected override void ProcessRecord() {
 

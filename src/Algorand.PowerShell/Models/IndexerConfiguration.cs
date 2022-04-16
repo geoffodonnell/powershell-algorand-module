@@ -5,10 +5,10 @@ namespace Algorand.PowerShell.Models {
 	public class IndexerConfiguration {
 
 		[JsonProperty("host")]
-		public string? Host { get; set; }
+		public string Host { get; set; }
 
 		[JsonProperty("apiKey")]
-		public string? ApiKey { get; set; }
+		public string ApiKey { get; set; }
 
 	}
 

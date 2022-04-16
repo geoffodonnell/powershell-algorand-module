@@ -3,7 +3,11 @@ using KeePassLib.Interfaces;
 using KeePassLib.Keys;
 using KeePassLib.Security;
 using KeePassLib.Serialization;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Algorand.PowerShell {
 
@@ -19,7 +23,7 @@ namespace Algorand.PowerShell {
 
 		private readonly IStatusLogger mStatusLogger;
 		private readonly string mFilePath;
-		private PwDatabase? mDatabase;
+		private PwDatabase mDatabase;
 
 		public AccountStore(string filePath) {
 			mStatusLogger = new NullStatusLogger();

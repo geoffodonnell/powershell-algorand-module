@@ -8,7 +8,7 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 		[Parameter(
 			Mandatory = true,
 			ValueFromPipeline = true)]
-		public Algorand.Account? Account { get; set; }
+		public Algorand.Account Account { get; set; }
 
 		protected override void ProcessRecord() {
 

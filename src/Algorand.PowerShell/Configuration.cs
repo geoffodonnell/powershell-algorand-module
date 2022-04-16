@@ -1,5 +1,6 @@
 ﻿using Algorand.PowerShell.Models;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Algorand.PowerShell {
 

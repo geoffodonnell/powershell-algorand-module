@@ -1,4 +1,5 @@
 ﻿using Algorand.V2.Algod.Model;
+using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Algod {

@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
 
@@ -18,12 +19,12 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? Next { get; set; }
+		public string Next { get; set; }
 
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? TxId { get; set; }
+		public string TxId { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -38,7 +39,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? SenderAddress { get; set; }
+		public string SenderAddress { get; set; }
 
 		protected override void ProcessRecord() {
 

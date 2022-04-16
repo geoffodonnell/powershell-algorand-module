@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using System;
+using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
 
@@ -25,7 +26,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? Next { get; set; }
+		public string Next { get; set; }
 
 		protected override void ProcessRecord() {
 

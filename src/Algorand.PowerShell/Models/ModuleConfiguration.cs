@@ -11,7 +11,7 @@ namespace Algorand.PowerShell.Models {
 		public IndexerConfiguration IndexerNode { get; set; }
 
 		[JsonProperty("account")]
-		public string? Account { get; set; }
+		public string Account { get; set; }
 
 		public ModuleConfiguration() {
 

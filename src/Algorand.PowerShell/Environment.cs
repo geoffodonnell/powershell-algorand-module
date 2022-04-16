@@ -2,6 +2,8 @@
 using Algorand.V2.Algod;
 using Algorand.V2.Indexer;
 using Newtonsoft.Json;
+using System;
+using System.Net.Http;
 
 namespace Algorand.PowerShell {
 
