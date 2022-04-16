@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
 
-namespace Algorand.PowerShell.Cmdlet {
+namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 	[Cmdlet(VerbsCommon.Get, "AlgorandAccountStore")]
 	public class Get_AlgorandAccountStore : CmdletBase {

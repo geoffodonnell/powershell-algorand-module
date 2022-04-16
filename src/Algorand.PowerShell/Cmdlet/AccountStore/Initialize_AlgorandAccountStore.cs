@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
 
-namespace Algorand.PowerShell.Cmdlet {
+namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 	[Cmdlet(VerbsData.Initialize, "AlgorandAccountStore")]
 	public class Initialize_AlgorandAccountStore : CmdletBase {
