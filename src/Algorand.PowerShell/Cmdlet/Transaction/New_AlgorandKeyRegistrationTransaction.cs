@@ -1,4 +1,5 @@
 ﻿using Algorand.PowerShell.Models;
+using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
@@ -21,7 +22,18 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 		[Parameter(Mandatory = false)]
 		public ulong VoteKeyDilution { get; set; }
 
+		[Parameter(Mandatory = false)]
+		public bool? Nonparticipation { get; set; }
+
 		protected override void ProcessRecord() {
+
+			if (Nonparticipation != null) {
+				WriteError(new ErrorRecord(
+					new NotSupportedException($"{nameof(Nonparticipation)} is not supported in this version."),
+					String.Empty,
+					ErrorCategory.NotSpecified,
+					this));
+			}
 
 			var result = CreateTransaction(TxType.KeyRegistration);
 

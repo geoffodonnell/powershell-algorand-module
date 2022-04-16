@@ -19,9 +19,9 @@
 
 	public static class TxTypeExtensions {
 
-		public static Transaction.Type ToSdkType(this TxType type) {
+		public static Transaction.Type ToSdkType(this TxType value) {
 
-			switch (type) {
+			switch (value) {
 				case TxType.Default:			return Transaction.Type.Default;
 				case TxType.Payment:			return Transaction.Type.Payment;
 				case TxType.KeyRegistration:	return Transaction.Type.KeyRegistration;
