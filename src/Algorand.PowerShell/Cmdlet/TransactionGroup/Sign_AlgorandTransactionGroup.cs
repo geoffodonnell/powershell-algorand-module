@@ -11,9 +11,16 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 		public Algorand.Common.TransactionGroup Group { get; set; }
 
 		[Parameter(
+			ParameterSetName = "SignWithAccount",
 			Mandatory = true,
 			ValueFromPipeline = false)]
 		public Algorand.Account Account { get; set; }
+
+		[Parameter(
+			ParameterSetName = "SignWithLogicSignature",
+			Mandatory = true,
+			ValueFromPipeline = false)]
+		public Algorand.LogicsigSignature LogicSignature { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -24,6 +31,10 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 
 			if (Account != null) {
 				Group.Sign(Account);
+			}
+
+			if (LogicSignature != null) {
+				Group.SignWithLogicSig(LogicSignature);
 			}
 
 			if (PassThru.IsPresent && (bool)PassThru) {

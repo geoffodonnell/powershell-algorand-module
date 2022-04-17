@@ -1,20 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsAlgorand.Sign, "AlgorandTransaction")]
-	public class Sign_AlgorandAccount : CmdletBase {
+	public class Sign_AlgorandTransaction : CmdletBase {
+
+		[Parameter(
+			Mandatory = true,
+			ValueFromPipeline = true)]
+		public Algorand.Transaction Transaction { get; set; }
+
+		[Parameter(
+			ParameterSetName = "SignWithAccount",
+			Mandatory = true,
+			ValueFromPipeline = false)]
+		public Algorand.Account Account { get; set; }
+
+		[Parameter(
+			ParameterSetName = "SignWithLogicSignature",
+			Mandatory = true,
+			ValueFromPipeline = false)]
+		public Algorand.LogicsigSignature LogicSignature { get; set; }
 
 		protected override void ProcessRecord() {
 
-			WriteError(
-				new ErrorRecord(new NotImplementedException(), String.Empty, ErrorCategory.NotSpecified, this));
+			SignedTransaction result = null;
+
+			if (Account != null) {
+				result = Account.SignTransaction(Transaction);
+			} else if (LogicSignature != null) {
+				result = SignLogicsigTransaction(LogicSignature, Transaction);
+			}
+
+			WriteObject(result);
+		}
+
+		protected static SignedTransaction SignLogicsigTransaction(
+			LogicsigSignature logicsig, Algorand.Transaction tx) {
+
+			try {
+				return Algorand.Account.SignLogicsigTransaction(logicsig, tx);
+			} catch (Exception) {
+				if (tx.sender.Equals(logicsig.Address)) {
+					return new SignedTransaction(tx, logicsig, tx.TxID());
+				}
+
+				throw;
+			}
 		}
 
 	}
+
 }

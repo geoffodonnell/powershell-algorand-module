@@ -19,6 +19,14 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 
 		protected override void ProcessRecord() {
 
+			if (!Group.IsSigned) {
+				WriteError(new ErrorRecord(
+					new InvalidOperationException($"All transactions must be signed before submission."),
+					String.Empty,
+					ErrorCategory.NotSpecified, 
+					this));
+			}
+
 			try {
 
 				// Wait for confirmation by default
