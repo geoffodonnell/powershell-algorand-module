@@ -5,7 +5,7 @@ using System.Management.Automation;
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandKeyRegistrationTransaction")]
-	public class New_AlgorandKeyRegistrationTransaction : NewTransactionBase {
+	public class New_AlgorandKeyRegistrationTransaction : NewTransactionCmdletBase {
 
 		[Parameter(Mandatory = false)]
 		public BytesModel VotePk { get; set; }

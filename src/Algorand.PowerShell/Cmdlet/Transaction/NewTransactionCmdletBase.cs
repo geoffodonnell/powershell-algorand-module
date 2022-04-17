@@ -6,7 +6,7 @@ using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
-	public abstract class NewTransactionBase : CmdletBase {
+	public abstract class NewTransactionCmdletBase : CmdletBase {
 
 		[Parameter(Mandatory = false)]
 		public ulong? Fee { get; set; }

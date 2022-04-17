@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetFreezeTransaction")]
-	public class New_AlgorandAssetFreezeTransaction : NewTransactionBase {
+	public class New_AlgorandAssetFreezeTransaction : NewTransactionCmdletBase {
 
 		[Parameter(Mandatory = true)]
 		public Address FreezeAccount { get; set; }

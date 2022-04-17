@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetTransferTransaction")]
-	public class New_AlgorandAssetTransferTransaction : NewTransactionBase {
+	public class New_AlgorandAssetTransferTransaction : NewTransactionCmdletBase {
 
 		[Parameter(Mandatory = true)]
 		public ulong? XferAsset { get; set; }

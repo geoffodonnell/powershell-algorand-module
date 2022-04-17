@@ -7,7 +7,7 @@ using System.Management.Automation;
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandApplicationCallTransaction")]
-	public class New_AlgorandApplicationCallTransaction : NewTransactionBase {
+	public class New_AlgorandApplicationCallTransaction : NewTransactionCmdletBase {
 
 		[Parameter(Mandatory = true)]
 		public ulong? ApplicationId { get; set; }

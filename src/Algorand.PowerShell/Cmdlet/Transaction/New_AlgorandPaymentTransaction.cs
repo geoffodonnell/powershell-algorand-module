@@ -4,7 +4,7 @@ using System.Management.Automation;
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandPaymentTransaction")]
-	public class New_AlgorandPaymentTransaction : NewTransactionBase {
+	public class New_AlgorandPaymentTransaction : NewTransactionCmdletBase {
 
 		[Parameter(Mandatory = true)]
 		public Address Receiver { get; set; }
