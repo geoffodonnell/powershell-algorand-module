@@ -11,13 +11,13 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Lookup",
 			Mandatory = true,
 			ValueFromPipeline = true)]
-		public string? AccountId { get; set; }
+		public string AccountId { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string? Address { get; set; }
+		public string Address { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",

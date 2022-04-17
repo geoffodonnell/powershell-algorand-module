@@ -10,7 +10,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 			Position = 0,
 			Mandatory = true, 
 			ValueFromPipeline = true)]
-		public string? Catchpoint { get; set; }
+		public string Catchpoint { get; set; }
 
 		protected override void ProcessRecord() {
 

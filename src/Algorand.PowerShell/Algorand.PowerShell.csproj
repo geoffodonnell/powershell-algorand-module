@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+		<PackageReference Include="Algorand.Common" Version="1.0.1.1" />
 		<PackageReference Include="Algorand2" Version="0.2.1.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="pt.KeePassLibStd" Version="2.50.0.4849" />

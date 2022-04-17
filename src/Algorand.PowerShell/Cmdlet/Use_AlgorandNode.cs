@@ -12,13 +12,13 @@ namespace Algorand.PowerShell.Cmdlet {
 		public SwitchParameter Indexer { get; set; }
 
 		[Parameter(Mandatory = true)]
-		public string? Host { get; set; }
+		public string Host { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public string? ApiKey { get; set; }
+		public string ApiKey { get; set; }
 
 		[Parameter(ParameterSetName = "Algod", Mandatory = false)]
-		public string? PrivateApiKey { get; set; }
+		public string PrivateApiKey { get; set; }
 
 		protected override void ProcessRecord() {
 

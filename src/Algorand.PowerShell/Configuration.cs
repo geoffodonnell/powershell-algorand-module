@@ -52,7 +52,7 @@ namespace Algorand.PowerShell {
 			AccountStore = new AccountStore(filePath);
 		}
 
-		public static ModuleConfiguration? GetModuleConfiguration() {
+		public static ModuleConfiguration GetModuleConfiguration() {
 
 			var filePath = Path.Combine(ConfigurationDirectory, ConfigurationFileName);
 			var serializer = Environment.JsonSerializer;

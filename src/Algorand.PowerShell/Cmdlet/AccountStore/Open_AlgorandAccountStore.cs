@@ -7,7 +7,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 	public class Open_AlgorandAccountStore : CmdletBase {
 
 		[Parameter(Mandatory = true)]
-		public string? Password { get; set; }
+		public string Password { get; set; }
 
 		protected override void ProcessRecord() {
 

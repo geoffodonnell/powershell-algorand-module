@@ -11,7 +11,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 		public ulong Round { get; set; }
 
 		[Parameter(Position = 1, ValueFromPipeline = false)]
-		public string? TxId { get; set; }
+		public string TxId { get; set; }
 
 		protected override void ProcessRecord() {
 

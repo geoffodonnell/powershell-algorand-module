@@ -15,23 +15,23 @@ namespace Algorand.PowerShell {
 		private static readonly string mTokenHeader = "X-Algo-API-Token";
 		private static readonly object mLock = new object();
 
-		public static Algorand.V2.Algod.ICommonApi? AlgodCommonApi { get; set; }
+		public static Algorand.V2.Algod.ICommonApi AlgodCommonApi { get; set; }
 
-		public static IDefaultApi? AlgodDefaultApi { get; set; }
+		public static IDefaultApi AlgodDefaultApi { get; set; }
 
-		public static IPrivateApi? AlgodPrivateApi { get; set; }
+		public static IPrivateApi AlgodPrivateApi { get; set; }
 
-		public static Algorand.V2.Indexer.ICommonApi? IndexerCommonApi { get; set; }
+		public static Algorand.V2.Indexer.ICommonApi IndexerCommonApi { get; set; }
 
-		public static ILookupApi? IndexerLookupApi { get; set; }
+		public static ILookupApi IndexerLookupApi { get; set; }
 
-		public static ISearchApi? IndexerSearchApi { get; set; }
+		public static ISearchApi IndexerSearchApi { get; set; }
 
-		public static HttpClient? AlgodDefaultApiHttpClient { get; set; }
+		public static HttpClient AlgodDefaultApiHttpClient { get; set; }
 
-		public static HttpClient? AlgodPrivateApiHttpClient { get; set; }
+		public static HttpClient AlgodPrivateApiHttpClient { get; set; }
 
-		public static HttpClient? IndexerApiHttpClient { get; set; }
+		public static HttpClient IndexerApiHttpClient { get; set; }
 
 		public static JsonSerializer JsonSerializer { get; private set; }
 
@@ -110,7 +110,7 @@ namespace Algorand.PowerShell {
 			SetApiKey(IndexerApiHttpClient, indexerKey);
 		}
 
-		public static void SetAlgodNodeConfiguration(string host, string apiKey, string? privateApiKey) {
+		public static void SetAlgodNodeConfiguration(string host, string apiKey, string privateApiKey) {
 
 			var config = Configuration.GetModuleConfiguration() ?? new ModuleConfiguration();
 
