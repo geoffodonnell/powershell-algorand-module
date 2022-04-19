@@ -1,7 +1,7 @@
 ﻿using Org.BouncyCastle.Utilities;
 using Org.BouncyCastle.Utilities.Encoders;
 
-namespace Algorand.PowerShell.Models {
+namespace Algorand.PowerShell.Model {
 
 	public class BytesModel {
 

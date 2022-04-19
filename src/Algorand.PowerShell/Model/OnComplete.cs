@@ -1,6 +1,6 @@
 ﻿using Algorand.V2.Indexer.Model;
 
-namespace Algorand.PowerShell.Models {
+namespace Algorand.PowerShell.Model {
 
 	public enum OnComplete : ulong {
 

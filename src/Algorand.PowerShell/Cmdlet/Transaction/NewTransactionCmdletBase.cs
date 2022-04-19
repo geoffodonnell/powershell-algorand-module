@@ -1,4 +1,4 @@
-﻿using Algorand.PowerShell.Models;
+﻿using Algorand.PowerShell.Model;
 using Algorand.V2.Algod.Model;
 using Org.BouncyCastle.Utilities;
 using System;
@@ -86,7 +86,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 				};
 			}
 			
-			return Environment
+			return PsEnvironment
 				.AlgodDefaultApi
 				.ParamsAsync()
 				.GetAwaiter()

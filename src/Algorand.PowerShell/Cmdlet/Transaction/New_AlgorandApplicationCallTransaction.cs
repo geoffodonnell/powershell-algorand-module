@@ -1,4 +1,4 @@
-﻿using Algorand.PowerShell.Models;
+﻿using Algorand.PowerShell.Model;
 using Algorand.V2.Indexer.Model;
 using System;
 using System.Linq;
@@ -52,7 +52,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 					this));
 			}
 
-			var result = CreateTransaction(Models.TxType.ApplicationCall);
+			var result = CreateTransaction(Model.TxType.ApplicationCall);
 
 			result.applicationId = ApplicationId.GetValueOrDefault();
 			result.onCompletion = OnComplete.ToSdkType();

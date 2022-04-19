@@ -1,4 +1,4 @@
-﻿using Algorand.PowerShell.Models;
+﻿using Algorand.PowerShell.Model;
 using System;
 using System.Management.Automation;
 

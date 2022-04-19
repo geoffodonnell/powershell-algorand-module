@@ -1,4 +1,5 @@
-﻿using System.Management.Automation;
+﻿using Algorand.PowerShell.Model;
+using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Account {
 
@@ -8,7 +9,7 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 		[Parameter(
 			Mandatory = true,
 			ValueFromPipeline = true)]
-		public Algorand.Account Account { get; set; }
+		public AccountModel Account { get; set; }
 
 		protected override void ProcessRecord() {
 

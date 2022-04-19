@@ -1,17 +1,17 @@
-﻿using KeePassLib;
+﻿using Algorand.PowerShell.Model;
+using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Keys;
 using KeePassLib.Security;
 using KeePassLib.Serialization;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace Algorand.PowerShell {
 
-	public class AccountStore : IEnumerable<Account> {
+	public class AccountStore {
 
 		private const string DefaultGroup = "Default";
 
@@ -72,71 +72,81 @@ namespace Algorand.PowerShell {
 			mDatabase = null;
 		}
 
-		public virtual IEnumerator<Account> GetEnumerator() {
-			return ReadAll().GetEnumerator();
+		public virtual IEnumerable<AccountModel> GetAccounts(string genesisHash) {
+
+			var group = GetOrCreateGroup(genesisHash);
+
+			if (group == null) {
+				return new List<AccountModel>();
+			}
+
+			var result = new List<AccountModel>();
+
+			foreach (var entry in group.Entries) {
+
+				var name = entry.Strings.ReadSafe("Title")?.Trim();
+				var mnemonic = entry.Strings.Get("Password");
+
+				if (TryCreateAccount(mnemonic, out var account)) {
+					result.Add(new AccountModel(account) {
+						Name = name,
+						NetworkGenesisHash = genesisHash,
+					});
+				}
+			}
+
+			return result;
 		}
 
-		IEnumerator IEnumerable.GetEnumerator() {
-			return GetEnumerator();
-		}
-
-		public virtual void Add(Account account) {
+		public virtual void Add(AccountModel account) {
 
 			if (mDatabase == null) {
 				return;
 			}
 
-			var group = mDatabase
-				.RootGroup
-				.Groups
-				.FirstOrDefault(s => String.Equals(s.Name, DefaultGroup, StringComparison.OrdinalIgnoreCase));
+			var group = GetOrCreateGroup(account.NetworkGenesisHash);
 
 			if (group == null) {
-				throw new Exception($"An error occured while retrieving '{DefaultGroup}'");
+				throw new Exception($"An error occured while retrieving '{account.NetworkGenesisHash}'");
 			}
 
 			foreach (var entry in group.Entries) {
 
-				var title = entry.Strings.ReadSafe("Title")?.Trim();
+				var address = entry.Strings.ReadSafe("Address")?.Trim();
 
-				if (String.Equals(account.Address.ToString(), title)) {
+				if (String.Equals(account.Address.ToString(), address)) {
 					return;
 				}
 			}
 
 			var newEntry = new PwEntry(true, true);
 
-			newEntry.Strings.Set("Title", new ProtectedString(true, account.Address.ToString()));
+			newEntry.Strings.Set("Title", new ProtectedString(true, account.Name));
 			newEntry.Strings.Set("Password", new ProtectedString(true, account.ToMnemonic()));
+			newEntry.Strings.Set("Address", new ProtectedString(true, account.Address));
 
 			group.Entries.Add(newEntry);
 
 			mDatabase.Save(mStatusLogger);
 		}
 
-		public virtual void Remove(Account account) {
+		public virtual void Remove(AccountModel account) {
 
 			if (mDatabase == null) {
 				return;
 			}
 
-			var group = mDatabase
-				.RootGroup
-				.Groups
-				.FirstOrDefault(s => String.Equals(s.Name, DefaultGroup, StringComparison.OrdinalIgnoreCase));
+			var group = GetOrCreateGroup(account.NetworkGenesisHash);
 
 			if (group == null) {
-				throw new Exception($"An error occured while retrieving '{DefaultGroup}'");
+				throw new Exception($"An error occured while retrieving '{account.NetworkGenesisHash}'");
 			}
-
-			var result = new List<Account>();
 
 			foreach (var entry in group.Entries) {
 
-				var title = entry.Strings.ReadSafe("Title")?.Trim();
-				var mnemonic = entry.Strings.Get("Password");
+				var title = entry.Strings.ReadSafe("Address")?.Trim();
 
-				if (String.Equals(account.Address.ToString(), title)) {
+				if (String.Equals(account.Address, title)) {
 					group.Entries.Remove(entry);
 					mDatabase.Save(mStatusLogger);
 					break;
@@ -144,12 +154,9 @@ namespace Algorand.PowerShell {
 			}
 		}
 
-		protected virtual List<Account> ReadAll() {
+		protected virtual List<Account> ReadAllForNetwork(NetworkModel network) {
 
-			var group = mDatabase?
-				.RootGroup
-				.Groups
-				.FirstOrDefault(s => String.Equals(s.Name, DefaultGroup, StringComparison.OrdinalIgnoreCase));
+			var group = GetOrCreateGroup(network.GenesisHash);
 
 			if (group == null) {
 				return new List<Account>();
@@ -168,6 +175,27 @@ namespace Algorand.PowerShell {
 			}
 
 			return result;
+		}
+
+		protected virtual PwGroup GetOrCreateGroup(string name) {
+
+			var group = mDatabase
+				.RootGroup
+				.Groups
+				.FirstOrDefault(s => String.Equals(s.Name, name, StringComparison.Ordinal));
+
+			if (group != null) {
+				return group;
+			}
+
+			mDatabase.RootGroup.AddGroup(
+				new PwGroup(true, true, name, PwIcon.Folder), true);
+			mDatabase.Save(mStatusLogger);
+
+			return mDatabase
+				.RootGroup
+				.Groups
+				.FirstOrDefault(s => String.Equals(s.Name, name, StringComparison.Ordinal));
 		}
 
 		protected virtual bool TryCreateAccount(ProtectedString mnemonic, out Account account) {

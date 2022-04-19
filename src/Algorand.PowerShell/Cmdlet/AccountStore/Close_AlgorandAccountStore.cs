@@ -8,7 +8,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 		protected override void ProcessRecord() {
 
-			if (!Configuration.AccountStore.Exists) {
+			if (!PsConfiguration.AccountStore.Exists) {
 				WriteError(new ErrorRecord(
 					new Exception("AccountStore is not initialized, use Initialize-AlgorandAccountStore instead."),
 					String.Empty,
@@ -17,7 +17,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 				return;
 			}
 
-			if (!Configuration.AccountStore.Opened) {
+			if (!PsConfiguration.AccountStore.Opened) {
 				WriteError(new ErrorRecord(
 					new Exception("AccountStore is not opened, use Open-AlgorandAccountStore and retry this action."),
 					String.Empty,
@@ -26,7 +26,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 				return;
 			}
 
-			Configuration.AccountStore.Close();
+			PsConfiguration.AccountStore.Close();
 		}
 
 	}

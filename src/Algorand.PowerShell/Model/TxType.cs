@@ -1,4 +1,4 @@
-﻿namespace Algorand.PowerShell.Models {
+﻿namespace Algorand.PowerShell.Model {
 
 	public enum TxType {
 

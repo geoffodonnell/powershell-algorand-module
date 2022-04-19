@@ -11,13 +11,13 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 		protected override void ProcessRecord() {
 
-			if (!Configuration.AccountStore.Exists) {
+			if (!PsConfiguration.AccountStore.Exists) {
 				WriteError(
 					new ErrorRecord(new Exception("AccountStore is not initialized, use Initialize-AlgorandAccountStore instead."), String.Empty, ErrorCategory.NotSpecified, this));
 				return;
 			}
 
-			Configuration.AccountStore.Open(Password);
+			PsConfiguration.AccountStore.Open(Password);
 		}
 
 	}

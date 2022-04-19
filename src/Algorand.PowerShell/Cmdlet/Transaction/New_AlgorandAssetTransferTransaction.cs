@@ -1,4 +1,4 @@
-﻿using Algorand.PowerShell.Models;
+﻿using Algorand.PowerShell.Model;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
