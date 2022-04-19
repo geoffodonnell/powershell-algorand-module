@@ -9,19 +9,13 @@ namespace Algorand.PowerShell.Cmdlet.Network {
 	[Cmdlet(VerbsCommon.Get, "AlgorandNetwork")]
 	public class Get_AlgorandNetwork : CmdletBase {
 
-		[Parameter(
-			ParameterSetName = "Current",
-			Mandatory = false)]
+		[Parameter(Mandatory = false)]
 		public SwitchParameter Current { get; set; }
 
-		[Parameter(
-			ParameterSetName = "Name",
-			Mandatory = false)]
+		[Parameter(Mandatory = false)]
 		public string Name { get; set; }
 
-		[Parameter(
-			ParameterSetName = "GenesisHash",
-			Mandatory = false)]
+		[Parameter(Mandatory = false)]
 		public BytesModel GenesisHash { get; set; }
 
 		protected override void ProcessRecord() {

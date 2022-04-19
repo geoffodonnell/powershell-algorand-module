@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Model {
@@ -58,16 +59,38 @@ namespace Algorand.PowerShell.Model {
 		public override object ConvertTo(
 			object sourceValue, Type destinationType, IFormatProvider formatProvider, bool ignoreCase) {
 
+			// Not sure if this is neccessary
+			if (sourceValue.GetType().IsAssignableFrom(destinationType)) {
+				return sourceValue;
+			}
+
 			if (sourceValue is AccountModel accountModel) {
 				return accountModel.Address;
 			}
 
 			if (sourceValue is string asString) {
+
+				if (!PsConfiguration.AccountStore.Exists) {
+					throw new Exception(
+						"AccountStore is not initialized, use Initialize-AlgorandAccountStore and retry this action.");
+				}
+
+				if (!PsConfiguration.AccountStore.Opened) {
+					throw new Exception(
+						"AccountStore is not opened, use Open-AlgorandAccountStore and retry this action.");
+				}
+
 				var network = PsConfiguration.GetCurrentNetwork();
+				var accounts = PsConfiguration.AccountStore.GetAccounts(network.GenesisHash);
+				var result = accounts?
+					.FirstOrDefault(s => String.Equals(s.Address, asString, StringComparison.Ordinal));
 
-				// TODO: Find account
+				if (result == null) {
+					result = accounts?
+						.FirstOrDefault(s => String.Equals(s.Name, asString, StringComparison.Ordinal));
+				}
 
-
+				return result;
 			}
 
 			return null;

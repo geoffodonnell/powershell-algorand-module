@@ -53,12 +53,17 @@ namespace Algorand.PowerShell.Model {
 		public override object ConvertTo(
 			object sourceValue, Type destinationType, IFormatProvider formatProvider, bool ignoreCase) {
 
+			// Not sure if this is neccessary
+			if (sourceValue.GetType().IsAssignableFrom(destinationType)) {
+				return sourceValue;
+			}
+
 			if (sourceValue is NetworkModel networkModel) {
 				return networkModel.GenesisHash;
 			}
 
 			if (sourceValue is string asString) {
-				return PsConfiguration.GetNetworkOrThrow(asString);
+				return new NetworkModel(PsConfiguration.GetNetworkOrThrow(asString));
 			}
 
 			return null;

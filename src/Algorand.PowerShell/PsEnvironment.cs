@@ -113,21 +113,20 @@ namespace Algorand.PowerShell {
 
 		public static void RefreshAlgodApiServiceSettings() {
 
-			var network = PsConfiguration.GetCurrentNetwork();
+			// Ideally, I'd be able to change the base URL and api key on the clients
+			// but that isn't currently supported, and changing the base URL on HttpClient
+			// isn't supported after the first request, so for now just re-initialize
+			// everything.
 
-			SetBaseAddress(AlgodDefaultApiHttpClient, network.AlgodNode.Host);
-			SetBaseAddress(AlgodPrivateApiHttpClient, network.AlgodNode.Host);
-
-			SetApiKey(AlgodDefaultApiHttpClient, network.AlgodNode.ApiKey);
-			SetApiKey(AlgodPrivateApiHttpClient, network.AlgodNode.PrivateApiKey);
+			AlgodDefaultApiHttpClient?.Dispose();
+			AlgodPrivateApiHttpClient?.Dispose();
+			TryInitializeAlgodClients();
 		}
 
 		public static void RefreshIndexerApiServiceSettings() {
 
-			var network = PsConfiguration.GetCurrentNetwork();
-
-			SetBaseAddress(IndexerApiHttpClient, network.IndexerNode.Host);
-			SetApiKey(IndexerApiHttpClient, network.IndexerNode.ApiKey);
+			IndexerApiHttpClient?.Dispose();
+			TryInitializeIndexerClients();
 		}
 
 		private static void SetBaseAddress(HttpClient httpClient, string url) {
