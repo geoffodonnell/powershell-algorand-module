@@ -1,31 +1,39 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
+using SdkAccount = Algorand.Account;
 
 namespace Algorand.PowerShell.Model {
 
+	[TypeConverter(typeof(AccountModelPSTypeConverter))]
 	public class AccountModel {
 
 		public string Name { get; set; }
 
-		public string Address => mAccount.Address.EncodeAsString();
+		public string Address => NetworkAccount?.Address?.EncodeAsString();
 
 		public string NetworkGenesisHash { get; set; }
 
-		private readonly Algorand.Account mAccount;
+		internal SdkAccount NetworkAccount { get; }
 
 		public AccountModel(Algorand.Account account) {
-			mAccount = account;
+			NetworkAccount = account;
 		}
 
 		public virtual SignedTransaction SignTransaction(Transaction transaction) {
 
-			return mAccount.SignTransaction(transaction);
+			return NetworkAccount.SignTransaction(transaction);
 		}
 
 		public virtual string ToMnemonic() {
 
-			return mAccount?.ToMnemonic();
+			return NetworkAccount?.ToMnemonic();
+		}
+
+		public override string ToString() {
+
+			return Address;
 		}
 
 	}

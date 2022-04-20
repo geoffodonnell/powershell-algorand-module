@@ -10,7 +10,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 			if (!PsConfiguration.AccountStore.Exists) {
 				WriteError(new ErrorRecord(
-					new Exception("AccountStore is not initialized, use Initialize-AlgorandAccountStore instead."),
+					new Exception("AccountStore is not initialized."),
 					String.Empty,
 					ErrorCategory.NotSpecified, 
 					this));
@@ -19,7 +19,7 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 			if (!PsConfiguration.AccountStore.Opened) {
 				WriteError(new ErrorRecord(
-					new Exception("AccountStore is not opened, use Open-AlgorandAccountStore and retry this action."),
+					new Exception("AccountStore is not opened."),
 					String.Empty,
 					ErrorCategory.NotSpecified,
 					this));

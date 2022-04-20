@@ -5,13 +5,47 @@ using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Account {
 
-	[Cmdlet(VerbsCommon.Get, "AlgorandAccount")]
+	[Cmdlet(VerbsCommon.Get, "AlgorandAccount", DefaultParameterSetName = "Default")]
 	public class Get_AlgorandAccount : CmdletBase {
-		
-		[Parameter(Mandatory = false, ValueFromPipeline = true)]
+
+		[Parameter(
+			ParameterSetName = "Address",
+			Mandatory = false,
+			ValueFromPipeline = false)]
 		public string Address { get; set; }
 
-		[Parameter(Mandatory = false, ValueFromPipeline = false)]
+		[Parameter(
+			ParameterSetName = "Index", 
+			Mandatory = false,
+			ValueFromPipeline = false)]
+		public int? Index { get; set; }
+
+		[Parameter(
+			ParameterSetName = "Name",
+			Mandatory = false,
+			ValueFromPipeline = false)]
+		public string Name { get; set; }
+
+		[Parameter(
+			ParameterSetName = "GetAll",
+			Mandatory = false, 
+			ValueFromPipeline = false)]
+		public SwitchParameter GetAll { get; set; }
+
+		/// <summary>
+		/// This parameter is a work-around which allow for the cmdlet to be called w/o any
+		/// parameters. It's value should not be used. 
+		/// </summary>
+		[Parameter(
+			ParameterSetName = "Default",
+			Mandatory = false,
+			ValueFromPipeline = false,
+			DontShow = true)]
+		public SwitchParameter Default { get; set; }
+
+		[Parameter(
+			Mandatory = false,
+			ValueFromPipeline = false)]
 		public NetworkModel Network { get; set; }
 
 		protected override void ProcessRecord() {
@@ -38,36 +72,37 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 				? PsConfiguration.GetNetworkOrThrow(Network.GenesisHash)
 				: PsConfiguration.GetCurrentNetwork();
 
-			var accounts = PsConfiguration.AccountStore.GetAccounts(network.GenesisHash);
+			var accounts = PsConfiguration
+				.AccountStore
+				.GetAccounts(network.GenesisHash);
 
-			if (String.IsNullOrEmpty(Address)) {
+			if (GetAll.IsPresent && (bool)GetAll) {
 				foreach (var account in accounts) {
 					WriteObject(account);
 				}
-			} else if (Address.StartsWith("*") && Address.EndsWith("*")) {
+			} else if (!String.IsNullOrWhiteSpace(Name)) {
+				var accountByName = accounts
+					.FirstOrDefault(s => String.Equals(s.Name, Name, StringComparison.OrdinalIgnoreCase));
 
-				var term = Address.Substring(1, Address.Length - 2);
+				WriteObject(accountByName);
+			} else if (!String.IsNullOrWhiteSpace(Address)) {
+				var accountByAddress = accounts
+					.FirstOrDefault(s => String.Equals(s.Address, Address, StringComparison.Ordinal));
 
-				foreach (var account in accounts.Where(s => s.Address.ToString().Contains(term))) {
-					WriteObject(account);
-				}
-			} else if (Address.StartsWith("*")) {
+				WriteObject(accountByAddress);
+			} else if (Index.HasValue) {
+				var accountByIndex = accounts
+					.Skip(Index.Value).FirstOrDefault();
 
-				var term = Address.Substring(1);
-
-				foreach (var account in accounts.Where(s => s.Address.ToString().EndsWith(term))) {
-					WriteObject(account);
-				}
-			} else if (Address.EndsWith("*")) {
-				var term = Address.Substring(0, Address.Length - 1);
-
-				foreach (var account in accounts.Where(s => s.Address.ToString().StartsWith(term))) {
-					WriteObject(account);
-				}
+				WriteObject(accountByIndex);
 			} else {
-				var account = accounts.FirstOrDefault(s => s.Address.ToString().Equals(Address));
+				var address = PsConfiguration
+					.GetDefaultAccount(network.GenesisHash);
 
-				WriteObject(account);
+				var accountByAddress = accounts
+					.FirstOrDefault(s => String.Equals(s.Address, address, StringComparison.Ordinal));
+
+				WriteObject(accountByAddress);
 			}
 
 		}

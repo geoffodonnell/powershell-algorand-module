@@ -12,8 +12,11 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 		protected override void ProcessRecord() {
 
 			if (PsConfiguration.AccountStore.Exists) {
-				WriteError(
-					new ErrorRecord(new Exception("AccountStore is already initialized, use Open-AlgorandAccountStore instead."), String.Empty, ErrorCategory.NotSpecified, this));
+				WriteError(new ErrorRecord(
+						new Exception("AccountStore is already initialized, use Open-AlgorandAccountStore instead."),
+						String.Empty, 
+						ErrorCategory.NotSpecified,
+						this));
 				return;
 			}
 

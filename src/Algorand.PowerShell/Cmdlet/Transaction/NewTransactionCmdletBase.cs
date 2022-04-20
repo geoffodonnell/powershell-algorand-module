@@ -99,7 +99,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 				return Note.Bytes;
 			}
 
-			if (String.IsNullOrWhiteSpace(NoteAsString)) {
+			if (!String.IsNullOrWhiteSpace(NoteAsString)) {
 				return Strings.ToUtf8ByteArray(NoteAsString);
 			}
 
