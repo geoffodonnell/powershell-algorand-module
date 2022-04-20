@@ -16,8 +16,8 @@ if (Test-Path -Path "$buildDir" -ErrorAction SilentlyContinue) {
     New-Item -Path "$buildDir" -ItemType Directory
 }
 
-dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildDir" -p:UseAppHost=false
+dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildDir" -p:UseAppHost=false --no-self-contained
 
-#$modulePath = Join-Path -Path $buildDir -ChildPath ".\Algorand.PowerShell.psd1" | Resolve-Path | Select -ExpandProperty Path
+$modulePath = Join-Path -Path $buildDir -ChildPath ".\Algorand.PowerShell.psd1" | Resolve-Path | Select -ExpandProperty Path
 
-# Import-Module $modulePath
+Import-Module $modulePath
