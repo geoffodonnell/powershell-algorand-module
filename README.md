@@ -30,4 +30,4 @@ powershell-algorand-module is licensed under a MIT license except for the except
 None.
 
 # Disclaimer
-Nothing in the repo constitutes professional and/or financial advice. Use this modeule at your own risk.
+Nothing in the repo constitutes professional and/or financial advice. Use this module at your own risk.
