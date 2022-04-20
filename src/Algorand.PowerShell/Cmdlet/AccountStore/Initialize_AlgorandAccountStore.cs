@@ -23,21 +23,9 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 
 			var cred1 = CommandRuntime.Host.UI.ReadLineAsSecureString();
 
-			//var cred1 = this.CommandRuntime.Host.UI.PromptForCredential(
-			//	"Enter Password",
-			//	"Set password for the new Account Store instance.", 
-			//	"Account Store",
-			//	"AccountStore");
-
 			CommandRuntime.Host.UI.Write("Confirm password: ");
 
 			var cred2 = CommandRuntime.Host.UI.ReadLineAsSecureString();
-
-			//var cred2 = this.CommandRuntime.Host.UI.PromptForCredential(
-			//	"Confirm Password",
-			//	"Enter password for the new Account Store instance.",
-			//	"Account Store",
-			//	"AccountStore");
 
 			var pw1 = (new NetworkCredential("", cred1)).Password;
 			var pw2 = (new NetworkCredential("", cred2)).Password;
@@ -51,6 +39,10 @@ namespace Algorand.PowerShell.Cmdlet.AccountStore {
 			}
 
 			PsConfiguration.AccountStore.Open(pw1);
+
+			CommandRuntime.Host.UI.WriteLine("");
+			CommandRuntime.Host.UI.WriteLine($"Created account store: '{PsConfiguration.AccountStore.Location}'");
+			CommandRuntime.Host.UI.WriteLine("");
 		}
 
 	}
