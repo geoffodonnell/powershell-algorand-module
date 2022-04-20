@@ -13,8 +13,6 @@ namespace Algorand.PowerShell {
 
 	public class AccountStore {
 
-		private const string DefaultGroup = "Default";
-
 		public string Location => mFilePath;
 
 		public bool Exists => File.Exists(mFilePath);
@@ -56,8 +54,6 @@ namespace Algorand.PowerShell {
 					mDatabase.Open(connection, key, mStatusLogger);
 				} else {
 					mDatabase.New(connection, key);
-					mDatabase.Save(mStatusLogger);
-					mDatabase.RootGroup.AddGroup(new PwGroup(true, true, DefaultGroup, PwIcon.Folder), true);
 					mDatabase.Save(mStatusLogger);
 				}
 			} catch (Exception) {
@@ -107,15 +103,20 @@ namespace Algorand.PowerShell {
 			var group = GetOrCreateGroup(account.NetworkGenesisHash);
 
 			if (group == null) {
-				throw new Exception($"An error occured while retrieving '{account.NetworkGenesisHash}'");
+				throw new Exception($"An error occured while retrieving group for '{account.NetworkGenesisHash}'");
 			}
 
 			foreach (var entry in group.Entries) {
 
 				var address = entry.Strings.ReadSafe("Address")?.Trim();
+				var name = entry.Strings.ReadSafe("Title")?.Trim();
 
-				if (String.Equals(account.Address.ToString(), address)) {
-					return;
+				if (String.Equals(account.Address.ToString(), address, StringComparison.Ordinal)) {
+					throw new Exception($"Account already exists, name: '{name}'");
+				}
+
+				if (String.Equals(account.Name.Trim(), name, StringComparison.OrdinalIgnoreCase)) {
+					throw new Exception($"Account already exists, name: '{name}'");
 				}
 			}
 
