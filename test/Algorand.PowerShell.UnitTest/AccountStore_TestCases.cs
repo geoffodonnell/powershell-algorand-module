@@ -2,6 +2,7 @@ using Algorand.PowerShell.Model;
 using Algorand.PowerShell.UnitTest.Services;
 using KeePassLib.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 
 namespace Algorand.PowerShell.UnitTest {
@@ -53,14 +54,71 @@ namespace Algorand.PowerShell.UnitTest {
 			target.Open(Password);
 
 			Assert.IsTrue(target.Opened);
-						
+
 			target.Add(account);
 
 			var accountsMainnet = target.GetAccounts(GenesisHashMainnet);
 			var accountsTestnet = target.GetAccounts(GenesisHashTestnet);
 
+			// Adding the account was successful
 			Assert.AreEqual(accountsMainnet.Count(), 1);
 			Assert.AreEqual(accountsTestnet.Count(), 0);
+
+			// Exact name already exists
+			Assert.ThrowsException<Exception>(() => {
+				target.Add(new AccountModel(new Algorand.Account()) {
+					Name = "One",
+					NetworkGenesisHash = GenesisHashMainnet
+				});
+			});
+
+			// Case-insensitive name already exists
+			Assert.ThrowsException<Exception>(() => {
+				target.Add(new AccountModel(new Algorand.Account()) {
+					Name = "ONE",
+					NetworkGenesisHash = GenesisHashMainnet
+				});
+			});
+
+			accountsMainnet = target.GetAccounts(GenesisHashMainnet);
+			accountsTestnet = target.GetAccounts(GenesisHashTestnet);
+
+			Assert.AreEqual(accountsMainnet.Count(), 1);
+			Assert.AreEqual(accountsTestnet.Count(), 0);
+
+			var mnemonic = account.ToMnemonic();
+
+			// Address already exists
+			Assert.ThrowsException<Exception>(() => {
+				target.Add(new AccountModel(new Algorand.Account(mnemonic)) {
+					Name = "Two",
+					NetworkGenesisHash = GenesisHashMainnet
+				});
+			});
+
+			accountsMainnet = target.GetAccounts(GenesisHashMainnet);
+			accountsTestnet = target.GetAccounts(GenesisHashTestnet);
+
+			Assert.AreEqual(accountsMainnet.Count(), 1);
+			Assert.AreEqual(accountsTestnet.Count(), 0);
+
+			// Address exists on different network
+			target.Add(new AccountModel(new Algorand.Account(mnemonic)) {
+				Name = "Two",
+				NetworkGenesisHash = GenesisHashTestnet
+			});
+
+			// Name exists on different network
+			target.Add(new AccountModel(new Algorand.Account()) {
+				Name = "One",
+				NetworkGenesisHash = GenesisHashTestnet
+			});
+
+			accountsMainnet = target.GetAccounts(GenesisHashMainnet);
+			accountsTestnet = target.GetAccounts(GenesisHashTestnet);
+
+			Assert.AreEqual(accountsMainnet.Count(), 1);
+			Assert.AreEqual(accountsTestnet.Count(), 2);
 		}
 
 		[TestMethod]
