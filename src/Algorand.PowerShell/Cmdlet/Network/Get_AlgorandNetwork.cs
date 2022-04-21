@@ -27,10 +27,10 @@ namespace Algorand.PowerShell.Cmdlet.Network {
 				results.Add(PsConfiguration.GetCurrentNetwork());
 			} else if (!String.IsNullOrWhiteSpace(Name)) {
 				results.Add(networks
-					.FirstOrDefault(s => String.Equals(s.Name, Name, StringComparison.InvariantCultureIgnoreCase)));
+					.FirstOrDefault(s => String.Equals(s.Name, Name, StringComparison.OrdinalIgnoreCase)));
 			} else if (GenesisHash != null) {
 				results.Add(networks
-					.FirstOrDefault(s => String.Equals(s.GenesisHash, GenesisHash.BytesAsBase64, StringComparison.InvariantCulture)));
+					.FirstOrDefault(s => String.Equals(s.GenesisHash, GenesisHash.BytesAsBase64, StringComparison.OrdinalIgnoreCase)));
 			} else {
 				results.AddRange(networks);
 			}

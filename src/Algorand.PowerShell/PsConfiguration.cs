@@ -37,7 +37,7 @@ namespace Algorand.PowerShell {
 			var result = config
 				.Networks
 				.Values
-				.FirstOrDefault(s => String.Equals(s.Name, nameOrGenesisHash, StringComparison.InvariantCultureIgnoreCase));
+				.FirstOrDefault(s => String.Equals(s.Name, nameOrGenesisHash, StringComparison.OrdinalIgnoreCase));
 
 			if (result != null) {
 				return result;
