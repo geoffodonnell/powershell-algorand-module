@@ -15,7 +15,14 @@ namespace Algorand.PowerShell {
 
 		public string Location => mFilePath;
 
-		public bool Exists => File.Exists(mFilePath);
+		public bool Exists { get {
+
+				// PwDatabase using this static instance for file operations, 
+				// by default that results in writing database files to disk,
+				// however for testing the file content is held in memory.
+				return IOConnection.m_FilesProvider.IsFileExist(mFilePath);
+			}
+		}
 
 		public bool Opened => mDatabase != null;
 
@@ -153,29 +160,6 @@ namespace Algorand.PowerShell {
 					break;
 				}
 			}
-		}
-
-		protected virtual List<Account> ReadAllForNetwork(NetworkModel network) {
-
-			var group = GetOrCreateGroup(network.GenesisHash);
-
-			if (group == null) {
-				return new List<Account>();
-			}
-
-			var result = new List<Account>();
-
-			foreach (var entry in group.Entries) {
-
-				var name = entry.Strings.ReadSafe("Title")?.Trim();
-				var mnemonic = entry.Strings.Get("Password");
-
-				if (TryCreateAccount(mnemonic, out var account)) {
-					result.Add(account);
-				}
-			}
-
-			return result;
 		}
 
 		protected virtual PwGroup GetOrCreateGroup(string name) {
