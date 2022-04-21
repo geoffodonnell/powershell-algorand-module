@@ -19,6 +19,10 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 
 		protected override void ProcessRecord() {
 
+			var name = !String.IsNullOrWhiteSpace(Name)
+				? Name
+				: Guid.NewGuid().ToString();
+
 			var network = Network != null 
 				? PsConfiguration.GetNetworkOrThrow(Network.GenesisHash)
 				: PsConfiguration.GetCurrentNetwork();
@@ -32,7 +36,7 @@ namespace Algorand.PowerShell.Cmdlet.Account {
 			}
 
 			var model = new AccountModel(account) {
-				Name = Name,
+				Name = name,
 				NetworkGenesisHash = network.GenesisHash
 			};
 

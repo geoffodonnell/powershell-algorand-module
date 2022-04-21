@@ -6,11 +6,8 @@ using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Network {
 
-	[Cmdlet(VerbsCommon.Get, "AlgorandNetwork")]
+	[Cmdlet(VerbsCommon.Get, "AlgorandNetwork", DefaultParameterSetName = "Default")]
 	public class Get_AlgorandNetwork : CmdletBase {
-
-		[Parameter(Mandatory = false)]
-		public SwitchParameter Current { get; set; }
 
 		[Parameter(Mandatory = false)]
 		public string Name { get; set; }
@@ -18,13 +15,30 @@ namespace Algorand.PowerShell.Cmdlet.Network {
 		[Parameter(Mandatory = false)]
 		public BytesModel GenesisHash { get; set; }
 
+		[Parameter(
+			ParameterSetName = "GetAll",
+			Mandatory = false,
+			ValueFromPipeline = false)]
+		public SwitchParameter GetAll { get; set; }
+
+		/// <summary>
+		/// This parameter is a work-around which allow for the cmdlet to be called w/o any
+		/// parameters. It's value should not be used. 
+		/// </summary>
+		[Parameter(
+			ParameterSetName = "Default",
+			Mandatory = false,
+			ValueFromPipeline = false,
+			DontShow = true)]
+		public SwitchParameter Default { get; set; }
+
 		protected override void ProcessRecord() {
 
 			var results = new List<NetworkConfiguration>();
 			var networks = PsConfiguration.GetNetworks();
 
-			if (Current.IsPresent && (bool)Current) {
-				results.Add(PsConfiguration.GetCurrentNetwork());
+			if (GetAll.IsPresent) {
+				results.AddRange(networks);
 			} else if (!String.IsNullOrWhiteSpace(Name)) {
 				results.Add(networks
 					.FirstOrDefault(s => String.Equals(s.Name, Name, StringComparison.OrdinalIgnoreCase)));
@@ -32,7 +46,7 @@ namespace Algorand.PowerShell.Cmdlet.Network {
 				results.Add(networks
 					.FirstOrDefault(s => String.Equals(s.GenesisHash, GenesisHash.BytesAsBase64, StringComparison.OrdinalIgnoreCase)));
 			} else {
-				results.AddRange(networks);
+				results.Add(PsConfiguration.GetCurrentNetwork());
 			}
 
 			foreach (var item in results) {

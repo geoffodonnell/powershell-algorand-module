@@ -15,12 +15,12 @@ namespace Algorand.PowerShell.UnitTest {
 		public const string GenesisHashMainnet = "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=";
 		public const string GenesisHashTestnet = "SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=";
 
-		[TestInitialize()]
+		[TestInitialize]
 		public void Initialize() {
 			IOConnection.m_FilesProvider = new UnitTestFilesProvider();
 		}
 
-		[TestCleanup()]
+		[TestCleanup]
 		public void Cleanup() {
 			
 			if (IOConnection.m_FilesProvider is UnitTestFilesProvider provider) {
