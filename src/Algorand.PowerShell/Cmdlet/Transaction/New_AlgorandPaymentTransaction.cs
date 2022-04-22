@@ -21,7 +21,10 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			result.receiver = Receiver;
 			result.amount = Amount;
-			result.closeRemainderTo = CloseRemainderTo;
+
+			if (CloseRemainderTo != null) {
+				result.closeRemainderTo = CloseRemainderTo;
+			}
 
 			WriteObject(result);
 		}

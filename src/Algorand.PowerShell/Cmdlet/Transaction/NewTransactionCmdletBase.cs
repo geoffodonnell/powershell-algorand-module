@@ -3,6 +3,8 @@ using Algorand.V2.Algod.Model;
 using Org.BouncyCastle.Utilities;
 using System;
 using System.Management.Automation;
+using SdkAccount = Algorand.Account;
+using SdkTransaction = Algorand.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
@@ -38,25 +40,34 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 		[Parameter(Mandatory = false)]
 		public Address RekeyTo { get; set; }
 
-		protected virtual Algorand.Transaction CreateTransaction(TxType type) {
+		protected virtual SdkTransaction CreateTransaction(TxType type) {
 
 			var txParams = GetNetworkParameters();
 
 			var note = GetNote();
 			var genesisHash = GetGenesisHash(txParams);
+			var genesisId = GetGenesisId(txParams);
 
-			var result = new Algorand.Transaction() {
+			var result = new SdkTransaction() {
 				type = type.ToSdkType(),
 				fee = Fee.GetValueOrDefault(txParams.Fee),
 				firstValid = FirstValid.GetValueOrDefault(txParams.LastRound),
 				genesisHash = genesisHash,
 				lastValid = LastValid.GetValueOrDefault(txParams.LastRound + 1000),
 				sender = Sender,
-				genesisID = GenesisId,
-				group = Group != null ? new Digest(Group.Bytes) : null,
-				note = note,
-				RekeyTo = RekeyTo
+				genesisID = genesisId,
+				note = note
 			};
+
+			if (Group != null) {
+				result.group = new Digest(Group.Bytes);
+			}
+
+			if (RekeyTo != null) {
+				result.RekeyTo = RekeyTo;
+			}
+
+			SdkAccount.SetFeeByFeePerByte(result, result.fee);
 
 			return result;
 		}
@@ -70,6 +81,15 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			return new Digest(txParams.GenesisHash);
 		}
 
+		protected virtual string GetGenesisId(TransactionParametersResponse txParams) {
+
+			if (!String.IsNullOrWhiteSpace(GenesisId)) {
+				return GenesisId;
+			}
+
+			return txParams.GenesisId;
+		}
+
 		protected virtual TransactionParametersResponse GetNetworkParameters() {
 
 			if (Fee.HasValue &&
@@ -80,7 +100,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 				return new TransactionParametersResponse {
 					Fee = Fee.Value,
 					GenesisHash = GenesisHash.Bytes,
-					GenesisId = GenesisId,
+					GenesisId = GenesisId ?? String.Empty,
 					LastRound = FirstValid.Value,
 					MinFee = Fee.Value
 				};

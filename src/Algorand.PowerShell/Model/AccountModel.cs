@@ -17,7 +17,7 @@ namespace Algorand.PowerShell.Model {
 
 		internal SdkAccount NetworkAccount { get; }
 
-		public AccountModel(Algorand.Account account) {
+		public AccountModel(SdkAccount account) {
 			NetworkAccount = account;
 		}
 
@@ -47,8 +47,9 @@ namespace Algorand.PowerShell.Model {
 
 		public override bool CanConvertTo(object sourceValue, Type destinationType) {
 
-			if (sourceValue is NetworkModel) {
-				return destinationType == typeof(string);
+			if (sourceValue is AccountModel) {
+				return destinationType == typeof(string)
+					|| destinationType == typeof(Address);
 			}
 
 			if (sourceValue is string) {
@@ -73,7 +74,11 @@ namespace Algorand.PowerShell.Model {
 			}
 
 			if (sourceValue is AccountModel accountModel) {
-				return accountModel.Address;
+				if (destinationType == typeof(string)) {
+					return accountModel.Address;
+				} else if (destinationType == typeof(Address)) {
+					return accountModel.NetworkAccount.Address;
+				}
 			}
 
 			if (sourceValue is string asString) {

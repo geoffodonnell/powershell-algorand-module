@@ -35,12 +35,16 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 					AlgodDefaultApi
 						.WaitForTransactionToComplete(result.TxId)
 						.GetAwaiter()
-						.GetResult();	
+						.GetResult();
 				}
 
 				WriteObject(result);
+			} catch (ApiException ex) {
+				WriteError(new ErrorRecord(
+					ex.GetExceptionWithBetterMessage(), String.Empty, ErrorCategory.NotSpecified, this));
 			} catch (Exception ex) {
-				WriteError(new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
+				WriteError(
+					new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
 			}
 		}
 
