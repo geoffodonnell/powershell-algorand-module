@@ -50,16 +50,40 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			result.assetParams = new Algorand.Transaction.AssetParams {
 				assetTotal = Total,
 				assetDecimals = Decimals.GetValueOrDefault(),
-				assetDefaultFrozen = DefaultFrozen.GetValueOrDefault(),
-				assetUnitName = UnitName,
-				assetName = AssetName,
-				url = Url,
-				metadataHash = MetaDataHash.Bytes,
-				assetManager = ManagerAddr,
-				assetReserve = ReserveAddr,
-				assetFreeze = FreezeAddr,
-				assetClawback = ClawbackAddr
+				assetDefaultFrozen = DefaultFrozen.GetValueOrDefault()
 			};
+
+			if (UnitName != null) {
+				result.assetParams.assetUnitName = UnitName;
+			}
+
+			if (AssetName != null) {
+				result.assetParams.assetName = AssetName;
+			}
+
+			if (Url != null) {
+				result.assetParams.url = Url;
+			}
+
+			if (MetaDataHash != null) {
+				result.assetParams.metadataHash = MetaDataHash.Bytes;
+			}
+
+			if (ManagerAddr != null) {
+				result.assetParams.assetManager = ManagerAddr;
+			}
+
+			if (ReserveAddr != null) {
+				result.assetParams.assetReserve = ReserveAddr;
+			}
+
+			if (FreezeAddr != null) {
+				result.assetParams.assetFreeze = FreezeAddr;
+			}
+
+			if (ClawbackAddr != null) {
+				result.assetParams.assetClawback = ClawbackAddr;
+			}
 
 			WriteObject(result);
 		}

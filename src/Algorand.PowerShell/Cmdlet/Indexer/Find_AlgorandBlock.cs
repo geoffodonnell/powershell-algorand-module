@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Algorand.V2.Indexer.Model;
+using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -19,6 +20,9 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 					Round.GetValueOrDefault());
 
 				WriteObject(result);
+			} catch (ApiException ex) {
+				WriteError(new ErrorRecord(
+					ex.GetExceptionWithBetterMessage(), String.Empty, ErrorCategory.NotSpecified, this));
 			} catch (Exception ex) {
 				WriteError(new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
 			}

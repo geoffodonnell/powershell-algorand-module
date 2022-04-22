@@ -20,8 +20,14 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			var result = CreateTransaction(TxType.AssetTransfer);
 
 			result.xferAsset = XferAsset;
-			result.assetSender = AssetSender;
-			result.assetReceiver = AssetReceiver;
+
+			if (AssetSender != null) {
+				result.assetSender = AssetSender;
+			}
+
+			if (AssetReceiver != null) {
+				result.assetReceiver = AssetReceiver;
+			}
 
 			WriteObject(result);
 		}

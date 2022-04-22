@@ -37,8 +37,14 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			var result = CreateTransaction(TxType.KeyRegistration);
 
-			result.votePK = new ParticipationPublicKey(VotePk.Bytes);
-			result.selectionPK = new VRFPublicKey(SelectionPk.Bytes);
+			if (VotePk != null) {
+				result.votePK = new ParticipationPublicKey(VotePk.Bytes);
+			}
+
+			if (SelectionPk != null) {
+				result.selectionPK = new VRFPublicKey(SelectionPk.Bytes);
+			}
+
 			result.voteFirst = VoteFirst;
 			result.voteLast = VoteLast;
 			result.voteKeyDilution = VoteKeyDilution;

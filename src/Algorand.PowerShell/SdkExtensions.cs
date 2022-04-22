@@ -17,6 +17,11 @@ namespace Algorand.PowerShell {
 			return new Exception(GetMessageFromNode(exception));
 		}
 
+		public static Exception GetExceptionWithBetterMessage(this IndexerException exception) {
+
+			return new Exception(GetMessageFromNode(exception));
+		}
+
 		public static string GetMessageFromNode(this AlgodException exception) {
 
 			if (exception == null) {

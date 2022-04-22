@@ -27,9 +27,18 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			result.xferAsset = XferAsset;
 			result.assetAmount = AssetAmount;
-			result.assetSender = AssetSender;
-			result.assetReceiver = AssetReceiver;
-			result.assetCloseTo = AssetCloseTo;
+
+			if (AssetSender != null) {
+				result.assetSender = AssetSender;
+			}
+
+			if (AssetReceiver != null) {
+				result.assetReceiver = AssetReceiver;
+			}
+
+			if (AssetCloseTo != null) {
+				result.assetCloseTo = AssetCloseTo;
+			}
 
 			WriteObject(result);
 		}

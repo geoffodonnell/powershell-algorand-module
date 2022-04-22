@@ -170,6 +170,9 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 				}
 
 				WriteObject(result);
+			} catch (ApiException ex) {
+				WriteError(new ErrorRecord(
+					ex.GetExceptionWithBetterMessage(), String.Empty, ErrorCategory.NotSpecified, this));
 			} catch (Exception ex) {
 				WriteError(new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
 			}

@@ -56,14 +56,38 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			result.applicationId = ApplicationId.GetValueOrDefault();
 			result.onCompletion = OnComplete.ToSdkType();
-			result.accounts = Accounts?.ToList();
-			result.approvalProgram = ApprovalProgram.Bytes != null ? new TEALProgram(ApprovalProgram.Bytes): null;
-			result.applicationArgs = AppArguments?.Select(s => s.Bytes).ToList();
-			result.clearStateProgram = ClearStateProgram.Bytes != null ? new TEALProgram(ClearStateProgram.Bytes) : null;
-			result.foreignApps = ForeignApps?.ToList();
-			result.foreignAssets = ForeignAssets?.ToList();
-			result.globalStateSchema = GlobalStateSchema;
-			result.localStateSchema = LocalStateSchema;
+
+			if (Accounts != null) {
+				result.accounts = Accounts.ToList();
+			}
+
+			if (ApprovalProgram != null) {
+				result.approvalProgram = new TEALProgram(ApprovalProgram.Bytes);
+			}
+
+			if (AppArguments != null) {
+				result.applicationArgs = AppArguments.Select(s => s.Bytes).ToList();
+			}
+
+			if (ClearStateProgram != null) {
+				result.clearStateProgram = new TEALProgram(ClearStateProgram.Bytes);
+			}
+
+			if (ForeignApps != null) {
+				result.foreignApps = ForeignApps.ToList();
+			}
+
+			if (ForeignAssets != null) {
+				result.foreignAssets = ForeignAssets?.ToList();
+			}
+
+			if (GlobalStateSchema != null) {
+				result.globalStateSchema = GlobalStateSchema;
+			}
+
+			if (LocalStateSchema != null) {
+				result.localStateSchema = LocalStateSchema;
+			}
 
 			WriteObject(result);
 		}
