@@ -32,11 +32,10 @@ Created account store: 'C:\Users\admin\AppData\Local\.algorand\accounts.kdbx'
 It is not neccessary to use the Account Store to obtain an account object for signing transactions. An account object can be initialized at any time with the following command:
 
 ```PowerShell
-PS C:\Users\admin> New_AlgorandAccount -Name "My Account" -Mnemonic "$ValidMnemonic"
+PS C:\Users\admin> New-AlgorandAccount -Name "My Account" -Mnemonic "$ValidMnemonic"
 ```
 
 ## Getting the configured network
-
 Call `Get-AlgorandNetwork` to get the current network
 
 ```PowerShell
@@ -60,7 +59,6 @@ betanet betanet-v1.0 mFgazF+2uRS1tMiL9dsj01hJGySEmPN28B/TjjvpVW0=
 ```
 
 ## Getting the node status
-
 Use `Get-AlgorandNodeStatus` to get the status of the configured algod node.
 
 ```PowerShell
@@ -91,7 +89,6 @@ tbd
 ## Examples
 
 ### Send a payment transaction
-
 ```PowerShell
 $sender = Get-AlgorandAccount
 $receiver = "ZZ6Z5YKFYOEINYKVID4HNJCM23OWAP5UP6IRTE4YPY27VMXPDJHMVAWUAY"
@@ -105,12 +102,19 @@ $result = Submit-AlgorandTransaction -Transaction $signedTx
 ## Helpful Commands
 
 ### List the available commands in the module
-
 ```PowerShell
 Get-Module -Name Algorand.PowerShell | Select -ExpandProperty ExportedCommands | Select -ExpandProperty Values | Select -ExpandProperty Name
 ```
 
 # Build
+## Prerequisites
+* .NET 6 SDK
+* PowerShell 7.2
+
+## Local
+Clone this repository and execute `build-and-load-local.ps1` in a PowerShell window to build the module and import it into the current session.
+
+## Pipelines
 powershell-algorand-module build pipelines use the [Assembly Info Task](https://github.com/BMuuN/vsts-assemblyinfo-task) extension.
 
 # License
