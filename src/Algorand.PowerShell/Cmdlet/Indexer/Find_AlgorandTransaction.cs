@@ -8,13 +8,6 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 	public class Find_AlgorandTransaction : CmdletBase {
 
 		[Parameter(
-			ParameterSetName = "Lookup",
-			Mandatory = true,
-			ValueFromPipeline = true)]
-		public string AccountId { get; set; }
-
-		[Parameter(
-			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
 		public string Address { get; set; }
@@ -117,14 +110,16 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			object result;
 
 			try {
-				if (String.IsNullOrEmpty(AccountId)) {
+				if (!AddressRole.HasValue &&
+					!ExcludeCloseTo.IsPresent &&
+					!ApplicationId.HasValue) {
 
 					// TODO: This method has a few signatures, need to look in to how each behave.
 
 					result = IndexerLookupApi
 						.TransactionsGetAsync(
 							CancellationToken, 
-							AccountId, 
+							Address, 
 							Limit, 
 							Next, 
 							NotePrefix,
