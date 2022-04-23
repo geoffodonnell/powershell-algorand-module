@@ -16,7 +16,7 @@
 		<PackageReference Include="Algorand2" Version="0.2.1.7" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="pt.KeePassLibStd" Version="2.50.0.4849" />
-		<PackageReference Include="System.Management.Automation" Version="7.2.2" />
+		<PackageReference Include="System.Management.Automation" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
