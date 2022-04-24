@@ -38,8 +38,8 @@ namespace Algorand.PowerShell.UnitTest {
 
 			target.Open(Password);
 
-			Assert.IsTrue(target.Exists);
 			Assert.IsTrue(target.Opened);
+			Assert.IsTrue(target.Exists);
 		}
 
 		[TestMethod]
