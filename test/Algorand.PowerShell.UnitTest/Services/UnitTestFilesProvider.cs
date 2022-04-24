@@ -15,7 +15,7 @@ namespace Algorand.PowerShell.UnitTest.Services {
 		private readonly ConcurrentDictionary<string, byte[]> mFiles;
 
 		public UnitTestFilesProvider() {
-			mFiles = new ConcurrentDictionary<string, byte[]>();
+			mFiles = new ConcurrentDictionary<string, byte[]>(StringComparer.Ordinal);
 		}
 
 		public virtual void DeleteFile(string fullname) {
