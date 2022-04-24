@@ -21,16 +21,25 @@ namespace Algorand.PowerShell.UnitTest.Services {
 
 		public virtual void DeleteFile(string fullname) {
 
-			mFiles.Remove(fullname, out var value);
+			var key = GetKeyFromFullName(fullname);
+
+			mFiles.Remove(key, out var value);
 		}
 
 		public virtual bool IsFileExist(string fullname) {
 
+
+			var key = GetKeyFromFullName(fullname);
+
+
 			Console.WriteLine(
 				$"UnitTestFilesProvider.IsFileExist(): fullName = {fullname}");
 
-			var result = mFiles.ContainsKey(fullname);
-			var tryGetResult = mFiles.TryGetValue(fullname, out var value);
+			Console.WriteLine(
+				$"UnitTestFilesProvider.IsFileExist(): key = {key}");
+
+			var result = mFiles.ContainsKey(GetKeyFromFullName(fullname));
+			var tryGetResult = mFiles.TryGetValue(GetKeyFromFullName(fullname), out var value);
 			var allKeysJson = JsonConvert.SerializeObject(mFiles.Keys.ToArray());
 
 			Console.WriteLine(
@@ -44,12 +53,15 @@ namespace Algorand.PowerShell.UnitTest.Services {
 
 		public virtual void MoveFile(string from, string to) {
 
-			if (!mFiles.TryGetValue(from, out var value)) {
-				throw new FileNotFoundException(from);
+			var fromKey = GetKeyFromFullName(from);
+			var toKey = GetKeyFromFullName(to);
+
+			if (!mFiles.TryGetValue(fromKey, out var value)) {
+				throw new FileNotFoundException(fromKey);
 			}
 
-			mFiles.TryAdd(to, value);
-			mFiles.TryRemove(from, out var removed);
+			mFiles.TryAdd(toKey, value);
+			mFiles.TryRemove(fromKey, out var removed);
 		}
 
 		public virtual Stream OpenReadLocal(string fullname) {
@@ -70,10 +82,21 @@ namespace Algorand.PowerShell.UnitTest.Services {
 
 		protected virtual Stream GetFileStream(string fullname, bool writable) {
 
+			var key = GetKeyFromFullName(fullname);
 			var bytes = mFiles
-				.GetOrAdd(fullname, s => new byte[mDefaultFileSizeMB * 1024]);
+				.GetOrAdd(key, s => new byte[mDefaultFileSizeMB * 1024]);
 
 			return new MemoryStream(bytes, writable);
+		}
+
+		protected virtual string GetKeyFromFullName(string fullname) {
+
+			if (Path.IsPathRooted(fullname)) {
+				return fullname;
+			}
+
+			return Path.GetFullPath(
+				Path.Combine(Environment.CurrentDirectory, fullname));
 		}
 
 	}
