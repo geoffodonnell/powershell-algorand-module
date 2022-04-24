@@ -15,10 +15,4 @@
 		</PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Algorand.PowerShell.psd1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

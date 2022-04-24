@@ -103,7 +103,7 @@ $result = Submit-AlgorandTransaction -Transaction $signedTx
 
 ### List the available commands in the module
 ```PowerShell
-Get-Module -Name Algorand.PowerShell | Select -ExpandProperty ExportedCommands | Select -ExpandProperty Values | Select -ExpandProperty Name
+Get-Module -Name Algorand | Select -ExpandProperty ExportedCommands | Select -ExpandProperty Values | Select -ExpandProperty Name
 ```
 
 # Build
@@ -112,7 +112,7 @@ Get-Module -Name Algorand.PowerShell | Select -ExpandProperty ExportedCommands |
 * PowerShell 7.2
 
 ## Local
-Clone this repository and execute `build-and-load-local.ps1` in a PowerShell window to build the module and import it into the current session.
+Clone this repository and execute `build-and-load-local.ps1` in a PowerShell window to build the module and import it into the current session. By default, when building locally the module is named `Algorand.Local`.
 
 ## Pipelines
 powershell-algorand-module build pipelines use the [Assembly Info Task](https://github.com/BMuuN/vsts-assemblyinfo-task) extension.
