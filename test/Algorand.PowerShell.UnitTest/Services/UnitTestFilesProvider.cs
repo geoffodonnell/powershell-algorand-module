@@ -1,4 +1,5 @@
 ﻿using KeePassLib.Serialization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,7 +29,17 @@ namespace Algorand.PowerShell.UnitTest.Services {
 			Console.WriteLine(
 				$"UnitTestFilesProvider.IsFileExist(): fullName = {fullname}");
 
-			return mFiles.ContainsKey(fullname);
+			var result = mFiles.ContainsKey(fullname);
+			var tryGetResult = mFiles.TryGetValue(fullname, out var value);
+			var allKeysJson = JsonConvert.SerializeObject(mFiles.Keys.ToArray());
+
+			Console.WriteLine(
+				$"UnitTestFilesProvider.IsFileExist(): result = {result}, tryGetResult = {tryGetResult}");
+
+			Console.WriteLine(
+				$"UnitTestFilesProvider.IsFileExist(): allKeysJson = {allKeysJson}");
+
+			return result;
 		}
 
 		public virtual void MoveFile(string from, string to) {
