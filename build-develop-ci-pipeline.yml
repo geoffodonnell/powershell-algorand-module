@@ -39,6 +39,7 @@ steps:
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(moduleName) --no-self-contained'
     modifyOutputPath: false
     publishWebProjects: false
+    zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
   displayName: 'Test Algorand.PowerShell: Unit Tests'

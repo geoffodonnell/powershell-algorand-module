@@ -28,27 +28,8 @@ namespace Algorand.PowerShell.UnitTest.Services {
 
 		public virtual bool IsFileExist(string fullname) {
 
-
-			var key = GetKeyFromFullName(fullname);
-
-
-			Console.WriteLine(
-				$"UnitTestFilesProvider.IsFileExist(): fullName = {fullname}");
-
-			Console.WriteLine(
-				$"UnitTestFilesProvider.IsFileExist(): key = {key}");
-
-			var result = mFiles.ContainsKey(GetKeyFromFullName(fullname));
-			var tryGetResult = mFiles.TryGetValue(GetKeyFromFullName(fullname), out var value);
-			var allKeysJson = JsonConvert.SerializeObject(mFiles.Keys.ToArray());
-
-			Console.WriteLine(
-				$"UnitTestFilesProvider.IsFileExist(): result = {result}, tryGetResult = {tryGetResult}");
-
-			Console.WriteLine(
-				$"UnitTestFilesProvider.IsFileExist(): allKeysJson = {allKeysJson}");
-
-			return result;
+			return mFiles.ContainsKey(
+				GetKeyFromFullName(fullname));
 		}
 
 		public virtual void MoveFile(string from, string to) {
