@@ -3,6 +3,7 @@ using Algorand.PowerShell.UnitTest.Services;
 using KeePassLib.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Algorand.PowerShell.UnitTest {
@@ -10,7 +11,7 @@ namespace Algorand.PowerShell.UnitTest {
 	[TestClass]
 	public class AccountStore_TestCases {
 
-		public const string FilePath = @"c:\accounts.kdbx";
+		public static readonly string FilePath = $".{Path.DirectorySeparatorChar}accounts.kdbx";
 		public const string Password = "password";
 		public const string GenesisHashMainnet = "wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=";
 		public const string GenesisHashTestnet = "SGO1GKSzyE7IEPItTxCByw9x8FmnrCDexi9/cOUJOiI=";
