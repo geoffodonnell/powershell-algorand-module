@@ -25,6 +25,9 @@ namespace Algorand.PowerShell.UnitTest.Services {
 
 		public virtual bool IsFileExist(string fullname) {
 
+			Console.WriteLine(
+				$"UnitTestFilesProvider.IsFileExist(): fullName = {fullname}");
+
 			return mFiles.ContainsKey(fullname);
 		}
 
