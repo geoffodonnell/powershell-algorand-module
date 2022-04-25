@@ -7,6 +7,7 @@ trigger: none
 variables:
   buildConfiguration: 'Release'
   moduleName: 'Algorand.DevelopCI'
+  guid: 'f5a2568c-137b-4049-9347-494915e0b837'
 
 pool:
   vmImage: ubuntu-latest
@@ -40,6 +41,16 @@ steps:
     modifyOutputPath: false
     publishWebProjects: false
     zipAfterPublish: false
+
+- task: PowerShell@2
+  inputs:
+    pwsh: true
+    targetType: 'filePath'
+    filePath: 'src/create-module-manifest.ps1'
+    arguments: >
+        -Path "$(Build.ArtifactStagingDirectory)/$(moduleName)" 
+        -Guid "$(guid)"
+    errorActionPreference: 'stop'
 
 - task: DotNetCoreCLI@2
   displayName: 'Test Algorand.PowerShell: Unit Tests'
