@@ -43,12 +43,13 @@ steps:
     zipAfterPublish: false
 
 - task: PowerShell@2
+  displayName: 'Create Module Manifest'
   inputs:
     pwsh: true
     targetType: 'filePath'
     filePath: 'src/create-module-manifest.ps1'
     arguments: >
-        -Path "$(Build.ArtifactStagingDirectory)/$(moduleName)" 
+        -Path "$(Build.ArtifactStagingDirectory)/$(moduleName)"
         -Guid "$(guid)"
     errorActionPreference: 'stop'
 
