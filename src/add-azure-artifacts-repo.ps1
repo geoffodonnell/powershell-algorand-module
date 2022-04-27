@@ -7,28 +7,22 @@ param (
     [Parameter(Position = 2, mandatory = $true)]
     [string] $PersonalAccessToken,
     [Parameter(Position = 3, mandatory = $false)]
-    [string] $RepositoryName = $null
+    [string] $RepositoryName = "AzureArtifacts"
 )
 
 $token = "$PersonalAccessToken" | ConvertTo-SecureString -AsPlainText -Force
 $creds = New-Object System.Management.Automation.PSCredential($UserName, $token)
 
-## Repository & Package Source names - (both names are arbitrary and unrelated)
-$repositoryName = $RepositoryName
-
-if ([System.String]::IsNullOrWhiteSpace($repositoryName)) {
-    $repositoryName = "AzureArtifacts"
-}
-
-$packageSourceName = "$($repositoryName)PackageSource"
+## Package Source name - (arbitrary and unrelated to repository name)
+$packageSourceName = "$($RepositoryName)PackageSource"
 
 ## Force TLS1.2
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
 
 ## Register repository
-if (-not (Get-PSRepository -Name $repositoryName -ErrorAction SilentlyContinue)) {
+if (-not (Get-PSRepository -Name $RepositoryName -ErrorAction SilentlyContinue)) {
     $registerArgs = @{
-        Name                        = $repositoryName
+        Name                        = $RepositoryName
         SourceLocation              = $FeedUrl
         PublishLocation             = $FeedUrl
         InstallationPolicy          = 'Trusted'
@@ -37,19 +31,21 @@ if (-not (Get-PSRepository -Name $repositoryName -ErrorAction SilentlyContinue))
 
     Register-PSRepository @registerArgs
 } else {
-    Write-Host "Repository named '$repositoryName' is already registered."
+    Write-Host "Repository '$RepositoryName' is already registered."
 }
 
 ## Register package source
 if (-not (Get-PackageSource -Name $packageSourceName -ErrorAction SilentlyContinue)) {
 
-    $found = Get-PackageSource | Where { ($_.ProviderName -eq 'NuGet') -and ($_.Location -eq $FeedUrl) } | Measure-Object
+    $found = Get-PackageSource `
+        | Where { ($_.ProviderName -eq 'NuGet') -and ($_.Location -eq $FeedUrl) } `
+        | Select -First 1
 
-    if ($found.Count -eq 0) {
+    if (-not $found) {
         Register-PackageSource -Name $packageSourceName -Location $FeedUrl -ProviderName NuGet -SkipValidate
     } else {
-        Write-Host "Package Source with Location='$FeedUrl' is already registered."
+        Write-Host "Package source $($found.Name) ($($found.Location)) is already registered."
     }
 } else {
-    Write-Host "Package Source named '$packageSourceName' is already registered."
+    Write-Host "Package source named '$packageSourceName' is already registered."
 }

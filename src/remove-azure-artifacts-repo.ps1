@@ -3,29 +3,23 @@ param (
     [Parameter(Position = 0, mandatory = $false)]
     [string] $FeedUrl,
     [Parameter(Position = 1, mandatory = $false)]
-    [string] $RepositoryName = $null
+    [string] $RepositoryName = "AzureArtifacts"
 )
 
-## Repository & Package Source names - (both names are arbitrary and unrelated)
-$repositoryName = $RepositoryName
+## Package source name - (arbitrary and unrelated to repository name)
+$packageSourceName = "$($RepositoryName)PackageSource"
 
-if ([System.String]::IsNullOrWhiteSpace($repositoryName)) {
-    $repositoryName = "AzureArtifacts"
-}
-
-$packageSourceName = "$($repositoryName)PackageSource"
-
-## Register repository
-$repository = Get-PSRepository -Name $repositoryName -ErrorAction SilentlyContinue
+## Unregister repository
+$repository = Get-PSRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
 if ($repository) {
     Unregister-PSRepository -Name $repository.Name
-    Write-Host "'$($repository.Name)' removed."
+    Write-Host "Repository '$($repository.Name)' removed."
 } else {
-    Write-Host "Repository '$repositoryName' is not registered."
+    Write-Host "Repository '$RepositoryName' is not registered."
 }
 
-## Register package source
+## Unregister package source - get it by name first, then try to find it by location
 $packageSource = Get-PackageSource -Name $packageSourceName -ErrorAction SilentlyContinue
 
 if ((-not $packageSource) -and (-not [System.String]::IsNullOrWhiteSpace($FeedUrl))) {
@@ -34,6 +28,8 @@ if ((-not $packageSource) -and (-not [System.String]::IsNullOrWhiteSpace($FeedUr
         | Select -First 1
 }
 
+## This package source seems to be removed when the repository is removed,
+## in case it's not though, try to remove it here.
 if ($packageSource) {
     Unregister-PackageSource -Name $packageSource.Name
     Write-Host "Package source '$($packageSource.Name)' removed."

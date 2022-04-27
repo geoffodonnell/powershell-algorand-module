@@ -2,8 +2,10 @@
 param (
     [Parameter(Position = 0, mandatory = $false)]
     [string] $Configuration = "Debug",
-    [Parameter(Position = 0, mandatory = $false)]
-    [string] $ModuleName = "Algorand.Local"
+    [Parameter(Position = 1, mandatory = $false)]
+    [string] $ModuleName = "Algorand.Local",
+    [Parameter(Position = 2, mandatory = $false)]
+    [string] $Prerelease = "dev"
 )
 
 function Get-FullPath {
@@ -34,7 +36,7 @@ if (Test-Path -Path "$buildOutputPath" -ErrorAction SilentlyContinue) {
 dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildOutputPath" --no-self-contained
 
 ## Create the module manifest
-Invoke-Expression "$createModuleManifest -Path '$buildOutputPath' -Guid $guid -Prerelease 'dev'"
+Invoke-Expression "$createModuleManifest -Path '$buildOutputPath' -Guid $guid -Prerelease '$Prerelease'"
 
 ## Import the module
 $modulePath = Join-Path -Path $buildOutputPath -ChildPath "$ModuleName.psd1"

@@ -17,7 +17,7 @@ $author = "Geoff O'Donnell"
 $rootModule = "Algorand.PowerShell.dll"
 
 $name = Get-Item -Path $Path | Select -ExpandProperty Name
-$moduleName = "$($Name).psd1";
+$moduleName = "$($name).psd1";
 $modulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $moduleName))
 
 # Version the module based on the file version of the assembly
@@ -25,13 +25,24 @@ $rootModulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPat
 $rootModuleInfo = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($rootModulePath)
 $version = $rootModuleInfo.FileVersion
 
-New-ModuleManifest -Author $author `
-    -CmdletsToExport "*" `
-    -CompanyName $author `
-    -Description "Algorand Tools for PowerShell" `
-    -Guid $Guid `
-    -ModuleVersion $version `
-    -Path $modulePath `
-    -PowerShellVersion "7.0" `
-    -Prerelease $Prerelease `
-    -RootModule $rootModule
+$newModuleManifestArgs = @{
+    Author              = $author
+    CmdletsToExport     = "*"
+    CompanyName         = $author
+    Description         = "Algorand Tools for PowerShell"
+    Guid                = $Guid
+    LicenseUri          = "https://raw.githubusercontent.com/geoffodonnell/powershell-algorand-module/main/LICENSE"
+    ModuleVersion       = $version
+    Path                = $modulePath
+    PowerShellVersion   = "7.0"
+    ProjectUri          = "https://github.com/geoffodonnell/powershell-algorand-module"
+    RootModule          = $rootModule
+}
+
+# Add the prerelease string if a value was provided
+if (-not [System.String]::IsNullOrWhiteSpace($Prerelease)) {
+    $newModuleManifestArgs.Prerelease = $Prerelease
+}
+
+# Create the module manifest
+New-ModuleManifest @newModuleManifestArgs
