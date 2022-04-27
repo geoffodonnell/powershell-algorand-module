@@ -3,6 +3,8 @@ param (
     [Parameter(Position = 0, mandatory = $true)]
     [string] $Path,
     [Parameter(Position = 1, mandatory = $false)]
+    [string] $Prerelease = $null,
+    [Parameter(Position = 2, mandatory = $false)]
     [string] $Guid = "c66dcc66-564b-45c8-8406-bac225fcdf02"
 )
 
@@ -31,4 +33,5 @@ New-ModuleManifest -Author $author `
     -ModuleVersion $version `
     -Path $modulePath `
     -PowerShellVersion "7.0" `
+    -Prerelease $Prerelease `
     -RootModule $rootModule

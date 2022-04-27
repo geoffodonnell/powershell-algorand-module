@@ -34,7 +34,7 @@ if (Test-Path -Path "$buildOutputPath" -ErrorAction SilentlyContinue) {
 dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildOutputPath" --no-self-contained
 
 ## Create the module manifest
-Invoke-Expression "$createModuleManifest -Path '$buildOutputPath' -Guid $guid"
+Invoke-Expression "$createModuleManifest -Path '$buildOutputPath' -Guid $guid -Prerelease 'dev'"
 
 ## Import the module
 $modulePath = Join-Path -Path $buildOutputPath -ChildPath "$ModuleName.psd1"

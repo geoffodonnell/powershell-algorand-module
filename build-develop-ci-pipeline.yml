@@ -6,6 +6,7 @@ trigger: none
 
 variables:
   buildConfiguration: 'Release'
+  prerelease: 'devci'
   moduleName: 'Algorand.DevelopCI'
   guid: 'f5a2568c-137b-4049-9347-494915e0b837'
 
@@ -50,6 +51,7 @@ steps:
     filePath: 'src/create-module-manifest.ps1'
     arguments: >
         -Path "$(Build.ArtifactStagingDirectory)/$(moduleName)"
+        -Prerelease "$(prerelease)"
         -Guid "$(guid)"
     errorActionPreference: 'stop'
 
