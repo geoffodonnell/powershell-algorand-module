@@ -1,14 +1,14 @@
-# Develop branch CI Pipeline
+# Main branch CI Pipeline
 
-name: DevelopCI_$(Year:yyyy).$(Month).$(Rev:r)    
+name: MainCI_$(Year:yyyy).$(Month).$(Rev:r)    
 
 trigger: none
 
 variables:
   buildConfiguration: 'Release'
   prerelease: 'ci'
-  moduleName: 'Algorand.DevelopCI'
-  guid: 'f5a2568c-137b-4049-9347-494915e0b837'
+  moduleName: 'Algorand.MainCI'
+  guid: '1d904a83-6e54-480a-87fa-02ea0aac36e0'
 
 pool:
   vmImage: ubuntu-latest

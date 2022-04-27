@@ -1,22 +1,17 @@
 [CmdletBinding()]
 param (
     [Parameter(Position = 0, mandatory = $true)]
-    [string] $Path,
-    [Parameter(Position = 1, mandatory = $true)]
-    [string] $ModuleName,
-    [Parameter(Position = 2, mandatory = $true)]
     [string] $FeedUrl,
-    [Parameter(Position = 3, mandatory = $true)]
+    [Parameter(Position = 1, mandatory = $true)]
     [string] $UserName,
-    [Parameter(Position = 4, mandatory = $true)]
+    [Parameter(Position = 2, mandatory = $true)]
     [string] $PersonalAccessToken,
-    [Parameter(Position = 5, mandatory = $false)]
+    [Parameter(Position = 3, mandatory = $false)]
     [string] $RepositoryName = $null
 )
 
 $token = "$PersonalAccessToken" | ConvertTo-SecureString -AsPlainText -Force
 $creds = New-Object System.Management.Automation.PSCredential($UserName, $token)
-$modulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $ModuleName))
 
 ## Repository & Package Source names - (both names are arbitrary and unrelated)
 $repositoryName = $RepositoryName
@@ -33,11 +28,11 @@ $packageSourceName = "$($repositoryName)PackageSource"
 ## Register repository
 if (-not (Get-PSRepository -Name $repositoryName -ErrorAction SilentlyContinue)) {
     $registerArgs = @{
-        Name                = $repositoryName
-        SourceLocation      = $FeedUrl
-        PublishLocation     = $FeedUrl
-        InstallationPolicy  = 'Trusted'
-        Credential          = $creds
+        Name                        = $repositoryName
+        SourceLocation              = $FeedUrl
+        PublishLocation             = $FeedUrl
+        InstallationPolicy          = 'Trusted'
+        Credential                  = $creds
     }
 
     Register-PSRepository @registerArgs
@@ -58,6 +53,3 @@ if (-not (Get-PackageSource -Name $packageSourceName -ErrorAction SilentlyContin
 } else {
     Write-Host "Package Source named '$packageSourceName' is already registered."
 }
-
-## Publish the module
-Publish-Module -Path $modulePath -Repository $repositoryName -NuGetApiKey "$PersonalAccessToken"
