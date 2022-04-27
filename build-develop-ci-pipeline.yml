@@ -1,6 +1,6 @@
 # Develop branch CI Pipeline
 
-name: DevelopCI_$(Year:yyyy).$(Month).$(DayOfMonth).$(Rev:r)    
+name: DevelopCI_$(Year:yyyy).$(Month).$(Rev:r)    
 
 trigger: none
 
