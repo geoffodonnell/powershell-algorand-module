@@ -2,7 +2,8 @@
 
 name: DevelopCI_$(Year:yyyy).$(Month).$(Rev:r)    
 
-trigger: none
+trigger:
+- develop
 
 variables:
   buildConfiguration: 'Release'
