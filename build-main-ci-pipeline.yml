@@ -2,7 +2,8 @@
 
 name: MainCI_$(Year:yyyy).$(Month).$(Rev:r)    
 
-trigger: none
+trigger:
+- main
 
 variables:
   buildConfiguration: 'Release'
