@@ -10,7 +10,7 @@ variables:
   guid: '770fd246-4dff-4ce4-9550-6451d8e33ae2'
   majorVersion: '0'
   minorVersion: '0'
-  prerelease: ''
+  prerelease: 'beta'
 
 pool:
   vmImage: ubuntu-latest
