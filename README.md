@@ -1,4 +1,6 @@
 # powershell-algorand-module
+[![Dev CI](https://dev.azure.com/gbo-devops/github-pipelines/_apis/build/status/Algorand.PowerShell/Algorand.PowerShell%20Dev%20CI?branchName=develop)](https://dev.azure.com/gbo-devops/github-pipelines/_build/latest?definitionId=13&branchName=develop)
+![PSGallery version](https://img.shields.io/powershellgallery/v/Algorand?include_prereleases)
 [![Donate Algo](https://img.shields.io/badge/Donate-ALGO-000000.svg?style=flat)](https://algoexplorer.io/address/EJMR773OGLFAJY5L2BCZKNA5PXLDJOWJK4ED4XDYTYH57CG3JMGQGI25DQ)
 
 # Overview
@@ -17,6 +19,8 @@ Because this module is published to [PSGallery](https://www.powershellgallery.co
 ```PowerShell
 PS> Install-Module -Name Algorand -AllowPrerelease -Verbose
 ```
+
+Note, after installing the module call `Import-Module` to load it into the current session.
 
 # Getting Started
 The module is pre-configured for Mainnet, Testnet, and Betanet. For each of the pre-configured networks, the module connects to nodes maintained by [AlgoNode.io](https://algonode.io/) (Thanks AlgoNode!). The current Algorand network configuration determines where requests are directed. The current network can be obtained by calling `Get-AlgorandNetwork` with no arguments. 
