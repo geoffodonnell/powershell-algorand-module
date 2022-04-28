@@ -5,14 +5,18 @@
 This PowerShell module provides tools for the Algorand blockchain.
 
 ## Roadmap
-- [ ] Initial implementation
-- [ ] Publish to module repository
+- [x] Initial implementation
+- [x] Publish to module repository
 - [ ] Examples
 - [ ] Help documentation 
 - [ ] Advanced use cases
 
 # Installation
-tbd
+Because this module is published to [PSGallery](https://www.powershellgallery.com/packages/Algorand) it can be installed with the following command:
+
+```PowerShell
+PS> Install-Module -Name Algorand -AllowPrerelease -Verbose
+```
 
 # Getting Started
 The module is pre-configured for Mainnet, Testnet, and Betanet. For each of the pre-configured networks, the module connects to nodes maintained by [AlgoNode.io](https://algonode.io/) (Thanks AlgoNode!). The current Algorand network configuration determines where requests are directed. The current network can be obtained by calling `Get-AlgorandNetwork` with no arguments. 
