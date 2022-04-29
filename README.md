@@ -1,6 +1,6 @@
 # powershell-algorand-module
 [![Dev CI](https://dev.azure.com/gbo-devops/github-pipelines/_apis/build/status/Algorand.PowerShell/Algorand.PowerShell%20Dev%20CI?branchName=develop)](https://dev.azure.com/gbo-devops/github-pipelines/_build/latest?definitionId=13&branchName=develop)
-![PSGallery version](https://img.shields.io/powershellgallery/v/Algorand?include_prereleases)
+[![PSGallery version](https://img.shields.io/powershellgallery/v/Algorand?include_prereleases)](https://www.powershellgallery.com/packages/Algorand)
 [![Donate Algo](https://img.shields.io/badge/Donate-ALGO-000000.svg?style=flat)](https://algoexplorer.io/address/EJMR773OGLFAJY5L2BCZKNA5PXLDJOWJK4ED4XDYTYH57CG3JMGQGI25DQ)
 
 # Overview
