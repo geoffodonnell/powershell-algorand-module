@@ -9,12 +9,12 @@ This PowerShell module provides tools for the Algorand blockchain.
 ## Roadmap
 - [x] Initial implementation
 - [x] Publish to module repository
-- [ ] Examples
+- [x] Examples
 - [ ] Help documentation 
 - [ ] Advanced use cases
 
 # Installation
-Because this module is published to [PSGallery](https://www.powershellgallery.com/packages/Algorand) it can be installed with the following command:
+This module is published to [PSGallery](https://www.powershellgallery.com/packages/Algorand), therefore it can be installed with the following command:
 
 ```PowerShell
 PS> Install-Module -Name Algorand -AllowPrerelease -Verbose
@@ -89,29 +89,56 @@ CatchpointTotalBlocks       : 0
 CatchpointAcquiredBlocks    : 0
 ```
 
-## Notes
-tbd
-
 # Usage
-
 ## Examples
+## Get $ALGO balance
+```PowerShell
+PS> Get-AlgorandAccount | Get-AlgorandAccountInfo | Select -ExpandProperty Amount
+22001500
+```
+
+### Get ASA balance
+```PowerShell
+PS> Get-AlgorandAccount | Get-AlgorandAccountInfo | Select -ExpandProperty Assets
+
+    Amount  AssetId Creator IsFrozen
+    ------  ------- ------- --------
+ 733638011 21582668            False
+ 268130222 26832577            False
+    588105 26835113            False
+    270313 51435943            False
+     48007 51437163            False
+    308119 56963708            False
+```
 
 ### Send a payment transaction
 ```PowerShell
-$sender = Get-AlgorandAccount
-$receiver = "ZZ6Z5YKFYOEINYKVID4HNJCM23OWAP5UP6IRTE4YPY27VMXPDJHMVAWUAY"
-$amount = 3000
+PS> $sender = Get-AlgorandAccount
+PS> $receiver = "ZZ6Z5YKFYOEINYKVID4HNJCM23OWAP5UP6IRTE4YPY27VMXPDJHMVAWUAY"
+PS> $amount = 3000
 
-$tx = New-AlgorandPaymentTransaction -Sender $sender -Amount $amount -Receiver $receiver
-$signedTx = Sign-AlgorandTransaction -Transaction $tx -Account $sender
-$result = Submit-AlgorandTransaction -Transaction $signedTx
+PS> $tx = New-AlgorandPaymentTransaction -Sender $sender -Amount $amount -Receiver $receiver
+PS> $signedTx = Sign-AlgorandTransaction -Transaction $tx -Account $sender
+PS> Submit-AlgorandTransaction -Transaction $signedTx
+
+TxId
+----
+4NYOHPWD5MWIMPGE4PELLI3FPKO757HJADXUJI3HM7Q3WF7TYGJA
 ```
 
 ## Helpful Commands
 
 ### List the available commands in the module
 ```PowerShell
-Get-Module -Name Algorand | Select -ExpandProperty ExportedCommands | Select -ExpandProperty Values | Select -ExpandProperty Name
+PS> Get-Module -Name Algorand | Select -ExpandProperty ExportedCommands | Select -ExpandProperty Values | Select Name
+
+Name
+----
+Add-AlgorandNetwork
+Close-AlgorandAccountStore
+ConvertTo-AlgorandTransaction
+Find-AlgorandAccount
+...
 ```
 
 # Build
