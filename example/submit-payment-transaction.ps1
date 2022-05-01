@@ -37,11 +37,11 @@ PS> .\submit-payment-transaction.ps1 -Sender "NKYFG4FQVKX3PWH6PPY2W6VMH44NMLY3E5
 
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false)]
     [Algorand.Powershell.Model.AccountModel] $Sender = $null,
-    [Parameter(Position = 1, mandatory = $true)]
+    [Parameter(Position = 1, Mandatory = $true)]
     [string] $Receiver,
-    [Parameter(Position = 2, mandatory = $true)]
+    [Parameter(Position = 2, Mandatory = $true)]
     [ulong] $Amount = 0
 )
 

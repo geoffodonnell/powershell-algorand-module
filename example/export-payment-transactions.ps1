@@ -39,9 +39,9 @@ PS> .\export-payment-transactions.ps1 -Account "RWXECIK3BXIYZ3UF7EBODRP6R6UH6KBS
 
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false)]
     [string] $Account = $null,
-    [Parameter(Position = 1, mandatory = $false)]
+    [Parameter(Position = 1, Mandatory = $false)]
     [string] $Path = "$PSScriptRoot\export.csv"
 )
 
