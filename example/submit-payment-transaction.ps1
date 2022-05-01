@@ -19,11 +19,11 @@ Specifies the amount in micro-Algo to send (e.g. a value of 1000000 equals 1.0 $
 
 .INPUTS
 
-None. You cannot pipe objects to export-payment-transactions.ps1.
+Sender
 
 .OUTPUTS
 
-None. export-payment-transactions.ps1 does not generate any output.
+None. submit-payment-transaction.ps1 does not generate any output.
 
 .EXAMPLE
 
@@ -37,7 +37,7 @@ PS> .\submit-payment-transaction.ps1 -Sender "NKYFG4FQVKX3PWH6PPY2W6VMH44NMLY3E5
 
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, Mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false, ValueFromPipeline = $true)]
     [Algorand.Powershell.Model.AccountModel] $Sender = $null,
     [Parameter(Position = 1, Mandatory = $true)]
     [string] $Receiver,
@@ -74,6 +74,6 @@ if ($info.Amount -le ($Amount + $tx.fee)) {
 # Sign the transaction
 $signedTx = Sign-AlgorandTransaction -Transaction $tx -Account $sender
 
-# Submit the transaction to the network, by default this command wait for 
-# confirmation that the transaction was confirmed
+# Submit the transaction to the network, by default this command will
+# wait for the transaction to be confirmed
 $result = Submit-AlgorandTransaction -Transaction $signedTx
