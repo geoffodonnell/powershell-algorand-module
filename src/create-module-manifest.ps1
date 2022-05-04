@@ -26,17 +26,18 @@ $rootModuleInfo = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($rootModu
 $version = $rootModuleInfo.FileVersion
 
 $newModuleManifestArgs = @{
-    Author              = $author
-    CmdletsToExport     = "*"
-    CompanyName         = $author
-    Description         = "Algorand Tools for PowerShell"
-    Guid                = $Guid
-    LicenseUri          = "https://raw.githubusercontent.com/geoffodonnell/powershell-algorand-module/main/LICENSE"
-    ModuleVersion       = $version
-    Path                = $modulePath
-    PowerShellVersion   = "7.2" # Require .NET 6.0
-    ProjectUri          = "https://github.com/geoffodonnell/powershell-algorand-module"
-    RootModule          = $rootModule
+    Author                  = $author
+    CmdletsToExport         = "*"
+    CompanyName             = $author
+    CompatiblePSEditions    = "Core"
+    Description             = "Algorand Tools for PowerShell"
+    Guid                    = $Guid
+    LicenseUri              = "https://raw.githubusercontent.com/geoffodonnell/powershell-algorand-module/main/LICENSE"
+    ModuleVersion           = $version
+    Path                    = $modulePath
+    PowerShellVersion       = "7.2" # Require .NET 6.0
+    ProjectUri              = "https://github.com/geoffodonnell/powershell-algorand-module"
+    RootModule              = $rootModule
 }
 
 # Add the prerelease string if a value was provided
