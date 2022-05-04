@@ -34,7 +34,7 @@ $newModuleManifestArgs = @{
     LicenseUri          = "https://raw.githubusercontent.com/geoffodonnell/powershell-algorand-module/main/LICENSE"
     ModuleVersion       = $version
     Path                = $modulePath
-    PowerShellVersion   = "7.0"
+    PowerShellVersion   = "7.2" # Require .NET 6.0
     ProjectUri          = "https://github.com/geoffodonnell/powershell-algorand-module"
     RootModule          = $rootModule
 }
