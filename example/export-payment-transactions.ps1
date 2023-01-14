@@ -49,7 +49,7 @@ function Get-Columns {
     [CmdletBinding()]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [Algorand.V2.Indexer.Model.Transaction] $Transaction
+        [Algorand.Indexer.Model.Transaction] $Transaction
     )
 
     ## Process each value in the pipeline
@@ -85,7 +85,7 @@ function Select-Transactions {
     [CmdletBinding()]
     param (
         [Parameter(Position = 0, Mandatory = $true, ValueFromPipeline = $true)]
-        [Algorand.V2.Indexer.Model.Response4] $Response
+        [Algorand.Indexer.Model.TransactionsResponse] $Response
     )
         
     if ($Response -and $Response.Transactions) {
