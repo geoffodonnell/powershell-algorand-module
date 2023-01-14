@@ -1,10 +1,11 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetFreezeTransaction")]
-	public class New_AlgorandAssetFreezeTransaction : NewTransactionCmdletBase {
+	public class New_AlgorandAssetFreezeTransaction 
+		: NewTransactionCmdletBase<AssetFreezeTransaction> {
 
 		[Parameter(Mandatory = true)]
 		public Address FreezeAccount { get; set; }
@@ -17,11 +18,11 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.AssetFreeze);
+			var result = CreateTransaction();
 
-			result.freezeTarget = FreezeAccount;
-			result.assetFreezeID = FreezeAsset.GetValueOrDefault(0);
-			result.freezeState = AssetFrozen.GetValueOrDefault(false);
+			result.FreezeTarget = FreezeAccount;
+			result.AssetFreezeID = FreezeAsset.GetValueOrDefault(0);
+			result.FreezeState = AssetFrozen.GetValueOrDefault(false);
 
 			WriteObject(result);
 		}

@@ -6,6 +6,8 @@ namespace Algorand.PowerShell {
 
 	internal static class PsConstant {
 
+		public const string RFC3339DataTimeFormat = "yyyy-MM-ddThh:mm:sszzzz";
+
 		public readonly static NetworkConfiguration Mainnet = new NetworkConfiguration {
 			Name = "mainnet",
 			GenesisId = "mainnet-v1.0",

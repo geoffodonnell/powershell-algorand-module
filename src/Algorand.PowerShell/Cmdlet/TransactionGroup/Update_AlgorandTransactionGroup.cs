@@ -1,4 +1,5 @@
 ﻿using System.Management.Automation;
+using SdkTransaction = Algorand.Algod.Model.Transactions.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 
@@ -19,7 +20,7 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 		[Parameter (
 			Mandatory = true,
 			ValueFromPipeline = false)]
-		public Algorand.Transaction Transaction { get; set; }
+		public SdkTransaction Transaction { get; set; }
 
 		[Parameter(
 			Mandatory = false,

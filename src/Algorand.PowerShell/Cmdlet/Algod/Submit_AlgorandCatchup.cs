@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Algod {
@@ -16,12 +15,8 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 		protected override void ProcessRecord() {
 
 			try {
-				var result = AlgodPrivateApi
-					.CatchupPostAsync(Catchpoint, CancellationToken)
-					.GetAwaiter()
-					.GetResult();
-
-				WriteObject(result);
+				throw new NotSupportedException(
+					"This version of the PowerShell module does not support private API endpoints.");
 			} catch (ApiException ex) {
 				WriteError(new ErrorRecord(
 					ex.GetExceptionWithBetterMessage(), String.Empty, ErrorCategory.NotSpecified, this));

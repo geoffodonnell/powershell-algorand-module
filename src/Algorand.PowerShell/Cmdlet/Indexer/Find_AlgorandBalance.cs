@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -20,17 +19,12 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? Limit { get; set; }
+		public ulong? Limit { get; set; }
 
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
 		public string Next { get; set; }
-
-		[Parameter(
-			Mandatory = false,
-			ValueFromPipeline = false)]
-		public ulong? Round { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -45,15 +39,17 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		protected override void ProcessRecord() {
 
 			try {
-				var result = IndexerLookupApi.BalancesAsync(
-					CancellationToken,
-					AssetId.GetValueOrDefault(),
-					(bool)IncludeAll,
-					Limit,
-					Next,
-					Round, 
-					CurrencyGreaterThan,
-					CurrencyLessThan);
+				var result = IndexerLookupApi
+					.lookupAssetBalancesAsync(
+						CancellationToken,
+						AssetId.GetValueOrDefault(), 
+						CurrencyGreaterThan,
+						CurrencyLessThan,
+						(bool)IncludeAll,
+						Limit,
+						Next)
+					.GetAwaiter()
+					.GetResult();
 
 				WriteObject(result);
 			} catch (ApiException ex) {

@@ -1,10 +1,10 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandPaymentTransaction")]
-	public class New_AlgorandPaymentTransaction : NewTransactionCmdletBase {
+	public class New_AlgorandPaymentTransaction : NewTransactionCmdletBase<PaymentTransaction> {
 
 		[Parameter(Mandatory = true)]
 		public Address Receiver { get; set; }
@@ -17,13 +17,13 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.Payment);
+			var result = CreateTransaction();
 
-			result.receiver = Receiver;
-			result.amount = Amount;
+			result.Receiver = Receiver;
+			result.Amount = Amount;
 
 			if (CloseRemainderTo != null) {
-				result.closeRemainderTo = CloseRemainderTo;
+				result.CloseRemainderTo = CloseRemainderTo;
 			}
 
 			WriteObject(result);

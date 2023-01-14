@@ -1,13 +1,11 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetClawbackTransaction")]
-	public class New_AlgorandAssetClawbackTransaction : NewTransactionCmdletBase {
-
-		[Parameter(Mandatory = true)]
-		public ulong? XferAsset { get; set; }
+	public class New_AlgorandAssetClawbackTransaction 
+		: NewAssetMovementsTransactionCmdletBase<AssetClawbackTransaction> {
 
 		[Parameter(Mandatory = true)]
 		public ulong? AssetAmount { get; set; }
@@ -18,26 +16,19 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 		[Parameter(Mandatory = true)]
 		public Address AssetReceiver { get; set; }
 
-		[Parameter(Mandatory = false)]
-		public Address AssetCloseTo { get; set; }
-
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.AssetTransfer);
+			var result = CreateTransaction();
 
-			result.xferAsset = XferAsset;
-			result.assetAmount = AssetAmount;
+			result.XferAsset = XferAsset;
+			result.AssetAmount = AssetAmount.GetValueOrDefault(0);
 
 			if (AssetSender != null) {
-				result.assetSender = AssetSender;
+				result.AssetSender = AssetSender;
 			}
 
 			if (AssetReceiver != null) {
-				result.assetReceiver = AssetReceiver;
-			}
-
-			if (AssetCloseTo != null) {
-				result.assetCloseTo = AssetCloseTo;
+				result.AssetReceiver = AssetReceiver;
 			}
 
 			WriteObject(result);

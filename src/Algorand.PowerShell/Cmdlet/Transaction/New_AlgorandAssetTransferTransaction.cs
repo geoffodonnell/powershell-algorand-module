@@ -1,13 +1,11 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetTransferTransaction")]
-	public class New_AlgorandAssetTransferTransaction : NewTransactionCmdletBase {
-
-		[Parameter(Mandatory = true)]
-		public ulong? XferAsset { get; set; }
+	public class New_AlgorandAssetTransferTransaction
+		: NewAssetMovementsTransactionCmdletBase<AssetTransferTransaction> {
 
 		[Parameter(Mandatory = true)]
 		public ulong? AssetAmount { get; set; }
@@ -20,14 +18,14 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.AssetTransfer);
+			var result = CreateTransaction();
 
-			result.xferAsset = XferAsset;
-			result.assetAmount = AssetAmount;
-			result.assetReceiver = AssetReceiver;
+			result.XferAsset = XferAsset;
+			result.AssetAmount = AssetAmount.GetValueOrDefault(0);
+			result.AssetReceiver = AssetReceiver;
 
 			if (AssetCloseTo != null) {
-				result.assetCloseTo = AssetCloseTo;
+				result.AssetCloseTo = AssetCloseTo;
 			}
 
 			WriteObject(result);

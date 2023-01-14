@@ -1,33 +1,28 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 	[Cmdlet(VerbsCommon.New, "AlgorandAssetAcceptTransaction")]
-	public class New_AlgorandAssetAcceptTransaction : NewTransactionCmdletBase {
+	public class New_AlgorandAssetAcceptTransaction : 
+		NewAssetMovementsTransactionCmdletBase<AssetAcceptTransaction>  {
 
-		[Parameter(Mandatory = false)]
-		public ulong? XferAsset { get; set; }
+		[Parameter(Mandatory = true, ParameterSetName = "Default")]
+		public override Address Sender { get; set; }
 
-		[Parameter(Mandatory = false)]
-		public Address AssetSender { get; set; }
-
-		[Parameter(Mandatory = false)]
+		[Parameter(Mandatory = true, ParameterSetName = "Default")]
 		public Address AssetReceiver { get; set; }
+
+		[Parameter(Mandatory = true, ParameterSetName = "Address")]
+		public Address Address { get; set; }
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.AssetTransfer);
+			var result = CreateTransaction();
 
-			result.xferAsset = XferAsset;
-
-			if (AssetSender != null) {
-				result.assetSender = AssetSender;
-			}
-
-			if (AssetReceiver != null) {
-				result.assetReceiver = AssetReceiver;
-			}
+			result.XferAsset = XferAsset;
+			result.Sender = Sender ?? Address;
+			result.AssetReceiver = AssetReceiver ?? Address;			
 
 			WriteObject(result);
 		}

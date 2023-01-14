@@ -1,7 +1,7 @@
 ﻿using Algorand.PowerShell.Model;
 using System;
 using System.Management.Automation;
-using SdkAccount = Algorand.Account;
+using SdkAccount = Algorand.Algod.Model.Account;
 
 namespace Algorand.PowerShell.Cmdlet.Account {
 

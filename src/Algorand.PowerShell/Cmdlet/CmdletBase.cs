@@ -1,18 +1,14 @@
-﻿using Algorand.V2.Algod;
-using Algorand.V2.Indexer;
+﻿using Algorand.Algod;
+using Algorand.Indexer;
 using System.Threading;
 
 namespace Algorand.PowerShell.Cmdlet {
 
 	public abstract class CmdletBase : System.Management.Automation.Cmdlet {
 
-		protected static Algorand.V2.Algod.ICommonApi AlgodCommonApi => PsEnvironment.AlgodCommonApi;
-
 		protected static IDefaultApi AlgodDefaultApi => PsEnvironment.AlgodDefaultApi;
 
-		protected static IPrivateApi AlgodPrivateApi => PsEnvironment.AlgodPrivateApi;
-
-		protected static Algorand.V2.Indexer.ICommonApi IndexerCommonApi => PsEnvironment.IndexerCommonApi;
+		protected static ICommonApi IndexerCommonApi => PsEnvironment.IndexerCommonApi;
 
 		protected static ILookupApi IndexerLookupApi => PsEnvironment.IndexerLookupApi;
 

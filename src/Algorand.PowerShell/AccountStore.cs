@@ -1,4 +1,5 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model;
+using Algorand.PowerShell.Model;
 using KeePassLib;
 using KeePassLib.Interfaces;
 using KeePassLib.Keys;

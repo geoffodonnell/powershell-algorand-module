@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
+﻿using Algorand.Algod.Model.Transactions;
 
 namespace Algorand.PowerShell.Model {
 
@@ -25,14 +25,14 @@ namespace Algorand.PowerShell.Model {
 				return OnCompletion.Noop;
 			}
 
-			switch (value) {
-				case OnComplete.NoOp:				return OnCompletion.Noop;
-				case OnComplete.OptIn:				return OnCompletion.Optin;
-				case OnComplete.CloseOut:			return OnCompletion.Closeout;
-				case OnComplete.ClearState:			return OnCompletion.Clear;
-				case OnComplete.UpdateApplication:	return OnCompletion.Update;
-				default:							return OnCompletion.Noop;
-			}
+			return value switch {
+				OnComplete.NoOp					=> OnCompletion.Noop,
+				OnComplete.OptIn				=> OnCompletion.Optin,
+				OnComplete.CloseOut				=> OnCompletion.Closeout,
+				OnComplete.ClearState			=> OnCompletion.Clear,
+				OnComplete.UpdateApplication	=> OnCompletion.Update,
+				_								=> OnCompletion.Noop
+			};
 		}
 
 	}

@@ -1,5 +1,4 @@
 ﻿using Algorand.PowerShell.Model;
-using System;
 using System.Linq;
 using System.Management.Automation;
 
@@ -18,7 +17,7 @@ namespace Algorand.PowerShell.Cmdlet.LogicSignature {
 
 			var program = Program.Bytes;
 			var args = Arguments?.Select(s => s.Bytes).ToList();
-			var result = new LogicsigSignature { logic = program, args = args };
+			var result = new LogicsigSignature { Logic = program, Args = args };
 
 			WriteObject(result);			
 		}

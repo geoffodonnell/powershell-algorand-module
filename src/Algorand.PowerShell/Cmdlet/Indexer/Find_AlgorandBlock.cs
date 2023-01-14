@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -15,9 +14,12 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		protected override void ProcessRecord() {
 
 			try {
-				var result = IndexerLookupApi.BlocksAsync(
-					CancellationToken,
-					Round.GetValueOrDefault());
+				var result = IndexerLookupApi
+					.lookupBlockAsync(
+						CancellationToken,
+						Round.GetValueOrDefault())
+					.GetAwaiter()
+					.GetResult();
 
 				WriteObject(result);
 			} catch (ApiException ex) {

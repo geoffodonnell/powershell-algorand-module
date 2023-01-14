@@ -1,10 +1,11 @@
 ﻿using Algorand.Common;
-using Algorand.V2.Algod;
-using Algorand.V2.Algod.Model;
+using Algorand.Algod;
+using Algorand.Algod.Model;
 using System;
-using System.IO;
 using System.Management.Automation;
 using System.Threading.Tasks;
+using Algorand.Algod.Model.Transactions;
+using System.Collections.Generic;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
@@ -33,7 +34,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 				if (wait) {
 					AlgodDefaultApi
-						.WaitForTransactionToComplete(result.TxId)
+						.WaitForTransactionToComplete(result.Txid)
 						.GetAwaiter()
 						.GetResult();
 				}
@@ -48,15 +49,14 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			}
 		}
 
-		// Copied from SDK to support interface over impl type
 		protected static async Task<PostTransactionsResponse> SubmitTransaction(
 			IDefaultApi instance,
 			SignedTransaction signedTx) {
 
-			byte[] encodedTxBytes = Encoder.EncodeToMsgPack(signedTx);
-			using (MemoryStream ms = new MemoryStream(encodedTxBytes)) {
-				return await instance.TransactionsAsync(ms);
-			}
+			return await instance.TransactionsAsync(
+				new List<SignedTransaction>() {
+					signedTx
+				});			
 		}
 
 	}

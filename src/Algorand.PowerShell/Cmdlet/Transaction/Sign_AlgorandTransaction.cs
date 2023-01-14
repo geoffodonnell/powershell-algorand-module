@@ -1,8 +1,9 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model.Transactions;
+using Algorand.PowerShell.Model;
 using System;
 using System.Management.Automation;
 using SdkLogicSignature = Algorand.LogicsigSignature;
-using SdkTransaction = Algorand.Transaction;
+using SdkTransaction = Algorand.Algod.Model.Transactions.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
@@ -31,7 +32,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			SignedTransaction result = null;
 
 			if (Account != null) {
-				if (!String.Equals(Convert.ToBase64String(Transaction.genesisHash.Bytes), Account.NetworkGenesisHash)) {
+				if (!String.Equals(Convert.ToBase64String(Transaction.GenesisHash.Bytes), Account.NetworkGenesisHash)) {
 
 					WriteError(new ErrorRecord(
 						new Exception($"Account '{Account.Name}' is not configured for the network this transaction group is targeting."),
@@ -52,7 +53,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 		protected static SignedTransaction SignWithAccount(
 			AccountModel account, SdkTransaction tx) {
 
-			if (String.Equals(account.Address, tx.sender?.EncodeAsString())) {
+			if (String.Equals(account.Address, tx.Sender?.EncodeAsString())) {
 				return account.SignTransaction(tx);
 			}
 
@@ -63,10 +64,13 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			SdkLogicSignature logicsig, SdkTransaction tx) {
 
 			try {
-				return Algorand.Account.SignLogicsigTransaction(logicsig, tx);
+				return tx.Sign(logicsig);
 			} catch (Exception) {
-				if (tx.sender.Equals(logicsig.Address)) {
-					return new SignedTransaction(tx, logicsig, tx.TxID());
+				if (tx.Sender.Equals(logicsig.Address)) {
+					return new SignedTransaction() {
+						Tx = tx,
+						LSig = logicsig
+					};
 				}
 
 				throw;

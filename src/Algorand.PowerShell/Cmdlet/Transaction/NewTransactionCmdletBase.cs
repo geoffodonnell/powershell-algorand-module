@@ -1,73 +1,67 @@
-﻿using Algorand.PowerShell.Model;
-using Algorand.V2.Algod.Model;
+﻿using Algorand.Algod.Model;
+using Algorand.PowerShell.Model;
 using Org.BouncyCastle.Utilities;
 using System;
 using System.Management.Automation;
-using SdkAccount = Algorand.Account;
-using SdkTransaction = Algorand.Transaction;
+using SdkTransaction = Algorand.Algod.Model.Transactions.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
-	public abstract class NewTransactionCmdletBase : CmdletBase {
+	public abstract class NewTransactionCmdletBase<T>
+		: CmdletBase where T : SdkTransaction, new() {
 
 		[Parameter(Mandatory = false)]
-		public ulong? Fee { get; set; }
+		public virtual ulong? Fee { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public ulong? FirstValid { get; set; }
+		public virtual ulong? FirstValid { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public BytesModel GenesisHash { get; set; }
+		public virtual BytesModel GenesisHash { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public ulong? LastValid { get; set; }
+		public virtual ulong? LastValid { get; set; }
 
 		[Parameter(Mandatory = true)]
-		public Address Sender { get; set; }
+		public virtual Address Sender { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public string GenesisId { get; set; }
+		public virtual string GenesisId { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public BytesModel Group { get; set; }
+		public virtual BytesModel Group { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public BytesModel Note { get; set; }
+		public virtual BytesModel Note { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public string NoteAsString { get; set; }
+		public virtual string NoteAsString { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public Address RekeyTo { get; set; }
+		public virtual Address RekeyTo { get; set; }
 
-		protected virtual SdkTransaction CreateTransaction(TxType type) {
+		protected virtual T CreateTransaction() {
+
+			var result = new T();
 
 			var txParams = GetNetworkParameters();
+			var fee = Fee.GetValueOrDefault(txParams.Fee);
 
-			var note = GetNote();
-			var genesisHash = GetGenesisHash(txParams);
-			var genesisId = GetGenesisId(txParams);
-
-			var result = new SdkTransaction() {
-				type = type.ToSdkType(),
-				fee = Fee.GetValueOrDefault(txParams.Fee),
-				firstValid = FirstValid.GetValueOrDefault(txParams.LastRound),
-				genesisHash = genesisHash,
-				lastValid = LastValid.GetValueOrDefault(txParams.LastRound + 1000),
-				sender = Sender,
-				genesisID = genesisId,
-				note = note
-			};
+			result.Fee = Math.Max(1000, fee);
+			result.FirstValid = FirstValid.GetValueOrDefault(txParams.LastRound);
+			result.GenesisHash = GetGenesisHash(txParams);
+			result.LastValid = LastValid.GetValueOrDefault(txParams.LastRound + 1000);
+			result.Sender = Sender;
+			result.GenesisID = GetGenesisId(txParams);
+			result.Note = GetNote();
 
 			if (Group != null) {
-				result.group = new Digest(Group.Bytes);
+				result.Group = new Digest(Group.Bytes);
 			}
 
 			if (RekeyTo != null) {
 				result.RekeyTo = RekeyTo;
 			}
-
-			SdkAccount.SetFeeByFeePerByte(result, result.fee);
 
 			return result;
 		}
@@ -108,7 +102,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			
 			return PsEnvironment
 				.AlgodDefaultApi
-				.ParamsAsync()
+				.TransactionParamsAsync()
 				.GetAwaiter()
 				.GetResult();			
 		}

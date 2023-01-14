@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
+﻿using Algorand.Algod.Model;
 using System;
 using System.Management.Automation;
 
@@ -14,7 +14,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 
 			try {
 				var result = AlgodDefaultApi
-					.BlocksAsync(Round, Format.Json, CancellationToken)
+					.GetBlockAsync(CancellationToken, Round, Format.Json)
 					.GetAwaiter()
 					.GetResult();
 

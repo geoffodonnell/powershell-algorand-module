@@ -37,7 +37,7 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 			if (Account != null) {
 
 				if (Group.Transactions.Any(
-					s => !String.Equals(Convert.ToBase64String(s.genesisHash.Bytes), Account.NetworkGenesisHash))) {
+					s => !String.Equals(Convert.ToBase64String(s.GenesisHash.Bytes), Account.NetworkGenesisHash))) {
 
 					WriteError(new ErrorRecord(
 						new Exception($"Account '{Account.Name}' is not configured for the network this transaction group is targeting."),

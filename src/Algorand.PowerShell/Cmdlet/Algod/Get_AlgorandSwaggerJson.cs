@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Algod {
@@ -10,8 +9,8 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 		protected override void ProcessRecord() {
 
 			try {
-				var result = AlgodCommonApi
-					.Swagger_jsonAsync(CancellationToken)
+				var result = AlgodDefaultApi
+					.SwaggerJSONAsync(CancellationToken)
 					.GetAwaiter()
 					.GetResult();
 

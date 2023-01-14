@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Algod {
@@ -14,7 +13,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 
 			try {
 				var result = AlgodDefaultApi
-					.AssetsAsync(Id, CancellationToken)
+					.GetAssetByIDAsync(CancellationToken, Id)
 					.GetAwaiter()
 					.GetResult();
 

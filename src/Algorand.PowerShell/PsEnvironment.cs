@@ -1,5 +1,5 @@
-﻿using Algorand.V2.Algod;
-using Algorand.V2.Indexer;
+﻿using Algorand.Algod;
+using Algorand.Indexer;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -11,13 +11,9 @@ namespace Algorand.PowerShell {
 		private static readonly string mTokenHeader = "X-Algo-API-Token";
 		private static readonly object mLock = new object();
 
-		public static Algorand.V2.Algod.ICommonApi AlgodCommonApi { get; set; }
-
 		public static IDefaultApi AlgodDefaultApi { get; set; }
 
-		public static IPrivateApi AlgodPrivateApi { get; set; }
-
-		public static Algorand.V2.Indexer.ICommonApi IndexerCommonApi { get; set; }
+		public static ICommonApi IndexerCommonApi { get; set; }
 
 		public static ILookupApi IndexerLookupApi { get; set; }
 
@@ -73,8 +69,6 @@ namespace Algorand.PowerShell {
 				AlgodPrivateApiHttpClient = new HttpClient();
 
 				AlgodDefaultApi = new DefaultApi(AlgodDefaultApiHttpClient);
-				AlgodCommonApi = new Algorand.V2.Algod.CommonApi(AlgodDefaultApiHttpClient);
-				AlgodPrivateApi = new PrivateApi(AlgodPrivateApiHttpClient);
 
 				var algodHost = !String.IsNullOrEmpty(node?.Host)
 					? node.Host : null;
@@ -99,7 +93,7 @@ namespace Algorand.PowerShell {
 			IndexerApiHttpClient = new HttpClient();
 
 			IndexerLookupApi = new LookupApi(IndexerApiHttpClient);
-			IndexerCommonApi = new Algorand.V2.Indexer.CommonApi(IndexerApiHttpClient);
+			IndexerCommonApi = new CommonApi(IndexerApiHttpClient);
 			IndexerSearchApi = new SearchApi(IndexerApiHttpClient);
 
 			var indexerHost = !String.IsNullOrEmpty(node?.Host)

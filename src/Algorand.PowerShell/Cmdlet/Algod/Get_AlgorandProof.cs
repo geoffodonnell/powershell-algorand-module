@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
+﻿using Algorand.Algod.Model;
 using System;
 using System.Management.Automation;
 
@@ -17,7 +17,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 
 			try {
 				var result = AlgodDefaultApi
-					.ProofAsync(Round, TxId, Format.Json, CancellationToken)
+					.GetTransactionProofAsync(CancellationToken, Round, TxId, Format.Json)
 					.GetAwaiter()
 					.GetResult();
 

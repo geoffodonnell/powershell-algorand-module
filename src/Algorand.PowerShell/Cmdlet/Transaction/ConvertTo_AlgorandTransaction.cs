@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Algorand.Utils;
+using System;
 using System.Management.Automation;
-using SdkTransaction = Algorand.Transaction;
+using SdkTransaction = Algorand.Algod.Model.Transactions.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 

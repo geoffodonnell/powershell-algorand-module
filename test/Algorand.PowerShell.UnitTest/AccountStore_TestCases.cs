@@ -47,7 +47,7 @@ namespace Algorand.PowerShell.UnitTest {
 		public void Add_Account_To_AccountStore() {
 
 			var target = new AccountStore(FilePath);
-			var account = new AccountModel(new Algorand.Account()) {
+			var account = new AccountModel(new Algorand.Algod.Model.Account()) {
 				Name = "One",
 				NetworkGenesisHash = GenesisHashMainnet
 			};
@@ -67,7 +67,7 @@ namespace Algorand.PowerShell.UnitTest {
 
 			// Exact name already exists
 			Assert.ThrowsException<Exception>(() => {
-				target.Add(new AccountModel(new Algorand.Account()) {
+				target.Add(new AccountModel(new Algorand.Algod.Model.Account()) {
 					Name = "One",
 					NetworkGenesisHash = GenesisHashMainnet
 				});
@@ -75,7 +75,7 @@ namespace Algorand.PowerShell.UnitTest {
 
 			// Case-insensitive name already exists
 			Assert.ThrowsException<Exception>(() => {
-				target.Add(new AccountModel(new Algorand.Account()) {
+				target.Add(new AccountModel(new Algorand.Algod.Model.Account()) {
 					Name = "ONE",
 					NetworkGenesisHash = GenesisHashMainnet
 				});
@@ -91,7 +91,7 @@ namespace Algorand.PowerShell.UnitTest {
 
 			// Address already exists
 			Assert.ThrowsException<Exception>(() => {
-				target.Add(new AccountModel(new Algorand.Account(mnemonic)) {
+				target.Add(new AccountModel(new Algorand.Algod.Model.Account(mnemonic)) {
 					Name = "Two",
 					NetworkGenesisHash = GenesisHashMainnet
 				});
@@ -104,13 +104,13 @@ namespace Algorand.PowerShell.UnitTest {
 			Assert.AreEqual(accountsTestnet.Count(), 0);
 
 			// Address exists on different network
-			target.Add(new AccountModel(new Algorand.Account(mnemonic)) {
+			target.Add(new AccountModel(new Algorand.Algod.Model.Account(mnemonic)) {
 				Name = "Two",
 				NetworkGenesisHash = GenesisHashTestnet
 			});
 
 			// Name exists on different network
-			target.Add(new AccountModel(new Algorand.Account()) {
+			target.Add(new AccountModel(new Algorand.Algod.Model.Account()) {
 				Name = "One",
 				NetworkGenesisHash = GenesisHashTestnet
 			});
@@ -126,7 +126,7 @@ namespace Algorand.PowerShell.UnitTest {
 		public void Remove_Account_From_AccountStore() {
 
 			var target = new AccountStore(FilePath);
-			var account = new AccountModel(new Algorand.Account()) {
+			var account = new AccountModel(new Algorand.Algod.Model.Account()) {
 				Name = "Two",
 				NetworkGenesisHash = GenesisHashMainnet
 			};

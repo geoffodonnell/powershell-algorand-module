@@ -1,5 +1,6 @@
-﻿using Algorand.V2.Indexer.Model;
+﻿using Algorand.PowerShell.Model;
 using System;
+using System.Linq;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -23,7 +24,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? Limit { get; set; }
+		public ulong? Limit { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -47,7 +48,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string AuthAddr { get; set; }
+		public Address AuthAddr { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -77,28 +78,28 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			try {
 				if (String.IsNullOrEmpty(AccountId)) {
 					result = IndexerLookupApi
-						.AccountsAsync(
+						.lookupAccountByIDAsync(
 							CancellationToken,
 							AccountId,
-							Round,
+							String.Join(',', Exclude?.Select(s => s.ToSdkType())),
 							(bool)IncludeAll,
-							Exclude)
+							Round)
 						.GetAwaiter()
 						.GetResult();	
 				} else {
 					result = IndexerSearchApi
-						.AccountsAsync(
+						.searchForAccountsAsync(
 							CancellationToken,
+							ApplicationId,
 							AssetId,
+							AuthAddr, 
+							CurrencyGreaterThan,
+							CurrencyLessThan,
+							String.Join(',', Exclude?.Select(s => s.ToSdkType())),
+							(bool)IncludeAll,
 							Limit,
 							Next,
-							CurrencyGreaterThan,
-							(bool)IncludeAll,
-							CurrencyLessThan,
-							AuthAddr, 
-							Round,
-							ApplicationId,
-							Exclude)
+							Round)
 						.GetAwaiter()
 						.GetResult();
 				}

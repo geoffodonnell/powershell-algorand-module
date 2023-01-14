@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -21,7 +20,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? Limit { get; set; }
+		public ulong? Limit { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -33,7 +32,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			ParameterSetName = "Search",
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string Creator { get; set; }
+		public Address Creator { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -57,7 +56,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 					String.IsNullOrEmpty(Next)) {
 
 					result = IndexerLookupApi
-						.AssetsAsync(
+						.lookupAssetByIDAsync(
 							CancellationToken,
 							AssetId.Value,
 							(bool)IncludeAll)
@@ -65,15 +64,15 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 						.GetResult();
 				} else {
 					result = IndexerSearchApi
-						.AssetsAsync(
+						.searchForAssetsAsync(
 							CancellationToken,
+							AssetId,
+							Creator?.EncodeAsString(),
 							(bool)IncludeAll,
 							Limit,
-							Next,
-							Creator,
 							Name,
-							Unit,
-							AssetId)
+							Next,
+							Unit)
 						.GetAwaiter()
 						.GetResult();
 				}

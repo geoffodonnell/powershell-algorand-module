@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
+using SdkTransaction = Algorand.Algod.Model.Transactions.Transaction;
 
 namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 
@@ -9,7 +10,7 @@ namespace Algorand.PowerShell.Cmdlet.TransactionGroup {
 		protected override void ProcessRecord() {
 
 			WriteObject(
-				new Algorand.Common.TransactionGroup(Array.Empty<Algorand.Transaction>()));
+				new Algorand.Common.TransactionGroup(Array.Empty<SdkTransaction>()));
 		}
 
 	}

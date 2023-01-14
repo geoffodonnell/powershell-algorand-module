@@ -1,19 +1,19 @@
-﻿using Algorand.PowerShell.Model;
+﻿using Algorand.Algod.Model;
+using Algorand.Algod.Model.Transactions;
+using Algorand.PowerShell.Model;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Transaction {
 
-	[Cmdlet(VerbsCommon.New, "AlgorandAssetConfigTransaction")]
-	public class New_AlgorandAssetConfigTransaction : NewTransactionCmdletBase {
-
-		[Parameter(Mandatory = false)]
-		public ulong? ConfigAsset { get; set; }
+	[Cmdlet(VerbsCommon.New, "AlgorandAssetUpdateTransaction")]
+	public class New_AlgorandAssetUpdateTransaction 
+		: NewAssetChangeTransactionCmdletBase<AssetUpdateTransaction> {
 
 		[Parameter(Mandatory = false)]
 		public ulong? Total { get; set; }
 
 		[Parameter(Mandatory = false)]
-		public int? Decimals { get; set; }
+		public ulong? Decimals { get; set; }
 
 		[Parameter(Mandatory = false)]
 		public bool? DefaultFrozen { get; set; }
@@ -44,45 +44,45 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			var result = CreateTransaction(TxType.KeyRegistration);
+			var result = CreateTransaction();
 
-			result.assetIndex = ConfigAsset;
-			result.assetParams = new Algorand.Transaction.AssetParams {
-				assetTotal = Total,
-				assetDecimals = Decimals.GetValueOrDefault(),
-				assetDefaultFrozen = DefaultFrozen.GetValueOrDefault()
+			result.AssetIndex = AssetIndex.Value;
+			result.AssetParams = new AssetParams {
+				Total = Total,
+				Decimals = Decimals.GetValueOrDefault(),
+				DefaultFrozen = DefaultFrozen.GetValueOrDefault()
 			};
 
 			if (UnitName != null) {
-				result.assetParams.assetUnitName = UnitName;
+				result.AssetParams.UnitName = UnitName;
 			}
 
 			if (AssetName != null) {
-				result.assetParams.assetName = AssetName;
+				result.AssetParams.Name = AssetName;
 			}
 
 			if (Url != null) {
-				result.assetParams.url = Url;
+				result.AssetParams.Url = Url;
 			}
 
 			if (MetaDataHash != null) {
-				result.assetParams.metadataHash = MetaDataHash.Bytes;
+				result.AssetParams.MetadataHash = MetaDataHash.Bytes;
 			}
 
 			if (ManagerAddr != null) {
-				result.assetParams.assetManager = ManagerAddr;
+				result.AssetParams.Manager = ManagerAddr;
 			}
 
 			if (ReserveAddr != null) {
-				result.assetParams.assetReserve = ReserveAddr;
+				result.AssetParams.Reserve = ReserveAddr;
 			}
 
 			if (FreezeAddr != null) {
-				result.assetParams.assetFreeze = FreezeAddr;
+				result.AssetParams.Freeze = FreezeAddr;
 			}
 
 			if (ClawbackAddr != null) {
-				result.assetParams.assetClawback = ClawbackAddr;
+				result.AssetParams.Clawback = ClawbackAddr;
 			}
 
 			WriteObject(result);

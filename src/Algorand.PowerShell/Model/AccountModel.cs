@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Algorand.Algod.Model.Transactions;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Management.Automation;
-using SdkAccount = Algorand.Account;
+using SdkAccount = Algorand.Algod.Model.Account;
 
 namespace Algorand.PowerShell.Model {
 
@@ -23,7 +24,7 @@ namespace Algorand.PowerShell.Model {
 
 		public virtual SignedTransaction SignTransaction(Transaction transaction) {
 
-			return NetworkAccount.SignTransaction(transaction);
+			return transaction.Sign(NetworkAccount);
 		}
 
 		public virtual string ToMnemonic() {

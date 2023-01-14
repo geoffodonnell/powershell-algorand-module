@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
+﻿using Algorand.PowerShell.Model;
 using System;
 using System.Management.Automation;
 
@@ -10,7 +10,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string Address { get; set; }
+		public Address Address { get; set; }
 
 		[Parameter(
 			ParameterSetName = "Search",
@@ -33,7 +33,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? AssetId { get; set; }
+		public ulong? AssetId { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -58,7 +58,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? Limit { get; set; }
+		public ulong? Limit { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -98,7 +98,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public SigType? SigType { get; set; }
+		public string SigType { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -110,58 +110,82 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 			object result;
 
 			try {
-				if (!AddressRole.HasValue &&
-					!ExcludeCloseTo.IsPresent &&
-					!ApplicationId.HasValue) {
-
-					// TODO: This method has a few signatures, need to look in to how each behave.
-
+				if (!String.IsNullOrEmpty(TxId)) {
 					result = IndexerLookupApi
-						.TransactionsGetAsync(
-							CancellationToken, 
-							Address, 
-							Limit, 
-							Next, 
-							NotePrefix,
-							TxType,
-							SigType,
-							TxId,
-							Round,
-							MinRound,
-							MaxRound,
+						.lookupTransactionAsync(CancellationToken, TxId)
+						.GetAwaiter()
+						.GetResult();
+				} else if (Address != null) {
+					result = IndexerLookupApi
+						.lookupAccountTransactionsAsync(
+							CancellationToken,
+							Address.EncodeAsString(),
+							AfterTime?.ToString(PsConstant.RFC3339DataTimeFormat),
 							AssetId,
-							BeforeTime,
-							AfterTime,
+							BeforeTime?.ToString(PsConstant.RFC3339DataTimeFormat),
 							CurrencyGreaterThan,
 							CurrencyLessThan,
-							(bool)RekeyTo)
+							Limit,
+							MaxRound,
+							MinRound,
+							Next,
+							NotePrefix,
+							(bool)RekeyTo,
+							Round,
+							SigType,
+							TxType?.ToSdkType(),
+							TxId)
+						.GetAwaiter()
+						.GetResult();						
+				} else if (AssetId.HasValue) {
+					result = IndexerLookupApi
+						.lookupAssetTransactionsAsync(
+							CancellationToken,
+							AssetId.Value,
+							Address,
+							AddressRole.ToSdkType(),
+							AfterTime?.ToString(PsConstant.RFC3339DataTimeFormat),
+							BeforeTime?.ToString(PsConstant.RFC3339DataTimeFormat),
+							CurrencyGreaterThan,
+							CurrencyLessThan,
+							(bool)ExcludeCloseTo,
+							Limit,
+							MaxRound,
+							MinRound,
+							Next,
+							NotePrefix,
+							(bool)RekeyTo,
+							Round, 
+							SigType,
+							TxType?.ToSdkType(), 
+							TxId)
 						.GetAwaiter()
 						.GetResult();
 				} else {
+
 					result = IndexerSearchApi
-						.TransactionsAsync(
+						.searchForTransactionsAsync(
 							CancellationToken,
-							Limit,
-							Next,
-							NotePrefix,
-							TxType,
-							SigType,
-							TxId,
-							Round,
-							MinRound,
-							MaxRound,
-							(ulong?)AssetId,
-							BeforeTime,
-							AfterTime,
-							CurrencyGreaterThan,
-							CurrencyLessThan, 
 							Address,
-							AddressRole,
+							AddressRole.ToSdkType(),
+							AfterTime?.ToString(PsConstant.RFC3339DataTimeFormat),
+							ApplicationId,
+							AssetId,
+							BeforeTime?.ToString(PsConstant.RFC3339DataTimeFormat),
+							CurrencyGreaterThan,
+							CurrencyLessThan,
 							(bool)ExcludeCloseTo,
+							Limit,
+							MaxRound,
+							MinRound,
+							Next, NotePrefix,
 							(bool)RekeyTo,
-							ApplicationId)
+							Round,
+							SigType,
+							TxType?.ToSdkType(),
+							TxId)
 						.GetAwaiter()
-						.GetResult();
+						.GetResult();			
 				}
 
 				WriteObject(result);

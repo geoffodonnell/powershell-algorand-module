@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Algod.Model;
+﻿using Algorand.Algod.Model;
 using System;
 using System.Management.Automation;
 
@@ -14,7 +14,7 @@ namespace Algorand.PowerShell.Cmdlet.Algod {
 
 			try {
 				var result = AlgodDefaultApi
-					.AccountsAsync(Address, Format.Json, CancellationToken)
+					.AccountInformationAsync(CancellationToken, Address, null, Format.Json)
 					.GetAwaiter()
 					.GetResult();
 

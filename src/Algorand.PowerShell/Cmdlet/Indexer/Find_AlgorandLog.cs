@@ -1,5 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
-using System;
+﻿using System;
 using System.Management.Automation;
 
 namespace Algorand.PowerShell.Cmdlet.Indexer {
@@ -15,7 +14,7 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public int? Limit { get; set; }
+		public ulong? Limit { get; set; }
 
 		[Parameter(
 			Mandatory = false,
@@ -40,20 +39,23 @@ namespace Algorand.PowerShell.Cmdlet.Indexer {
 		[Parameter(
 			Mandatory = false,
 			ValueFromPipeline = false)]
-		public string SenderAddress { get; set; }
+		public Address SenderAddress { get; set; }
 
 		protected override void ProcessRecord() {
 
 			try {
-				var result = IndexerLookupApi.LogsAsync(
-					CancellationToken,
-					ApplicationId.GetValueOrDefault(),
-					Limit,
-					Next,
-					TxId,
-					MinRound,
-					MaxRound,
-					SenderAddress);
+				var result = IndexerLookupApi
+					.lookupApplicationLogsByIDAsync(
+						CancellationToken,
+						ApplicationId.GetValueOrDefault(),
+						Limit,
+						MinRound,
+						MaxRound,
+						Next,
+						SenderAddress,
+						TxId)
+					.GetAwaiter()
+					.GetResult();
 
 				WriteObject(result);
 			} catch (ApiException ex) {
