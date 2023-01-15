@@ -17,7 +17,7 @@ This PowerShell module provides tools for the Algorand blockchain.
 This module is published to [PSGallery](https://www.powershellgallery.com/packages/Algorand), therefore it can be installed with the following command:
 
 ```PowerShell
-PS> Install-Module -Name Algorand -AllowPrerelease -Verbose
+PS> Install-Module -Name Algorand -Verbose
 ```
 
 Note, after installing the module call `Import-Module` to load it into the current session.
