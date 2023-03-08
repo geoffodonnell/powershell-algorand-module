@@ -24,11 +24,13 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 		protected override void ProcessRecord() {
 
-			try {
+			// Wait for confirmation by default
+			var wait = NoWait.IsPresent ? !(bool)NoWait : true;
 
-				// Wait for confirmation by default
-				var wait = NoWait.IsPresent ? !(bool)NoWait : true;
-				var result = SubmitTransaction(AlgodDefaultApi, Transaction)
+			PostTransactionsResponse result = null;
+
+			try {				
+				result = SubmitTransaction(AlgodDefaultApi, Transaction)
 					.GetAwaiter()
 					.GetResult();
 
@@ -43,9 +45,16 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			} catch (ApiException ex) {
 				WriteError(new ErrorRecord(
 					ex.GetExceptionWithBetterMessage(), String.Empty, ErrorCategory.NotSpecified, this));
+
+			//Handling for: https://github.com/FrankSzendzielarz/dotnet-algorand-sdk/issues/11
+			} catch (FormatException ex) {
+				if (result != null) {
+					WriteObject(result);
+				} else {
+					WriteError(new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
+				}
 			} catch (Exception ex) {
-				WriteError(
-					new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
+				WriteError(new ErrorRecord(ex, String.Empty, ErrorCategory.NotSpecified, this));
 			}
 		}
 

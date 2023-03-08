@@ -53,11 +53,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 		protected static SignedTransaction SignWithAccount(
 			AccountModel account, SdkTransaction tx) {
 
-			if (String.Equals(account.Address, tx.Sender?.EncodeAsString())) {
-				return account.SignTransaction(tx);
-			}
-
-			return null;
+			return account.SignTransaction(tx);
 		}
 
 		protected static SignedTransaction SignLogicsigTransaction(
