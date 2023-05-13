@@ -28,11 +28,11 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			var result = CreateTransaction();
 
 			if (VotePk != null) {
-				result.VotePK = new ParticipationPublicKey(VotePk.Bytes);
+				result.Votepk = new ParticipationPublicKey(VotePk.Bytes);
 			}
 
 			if (SelectionPk != null) {
-				result.SelectionPK = new VRFPublicKey(SelectionPk.Bytes);
+				result.SelectionPk = new VRFPublicKey(SelectionPk.Bytes);
 			}
 
 			result.VoteFirst = VoteFirst;

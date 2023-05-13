@@ -20,7 +20,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			var result = CreateTransaction();
 
-			result.XferAsset = XferAsset;
+			result.XferAsset = XferAsset.GetValueOrDefault(0);
 			result.AssetAmount = AssetAmount.GetValueOrDefault(0);
 			result.AssetReceiver = AssetReceiver;
 

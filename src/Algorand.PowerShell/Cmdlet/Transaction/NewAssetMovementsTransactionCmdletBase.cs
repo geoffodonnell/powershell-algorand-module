@@ -13,7 +13,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 
 			var result = base.CreateTransaction();
 
-			result.XferAsset = XferAsset;
+			result.XferAsset = XferAsset.GetValueOrDefault(0);
 
 			return result;
 		}

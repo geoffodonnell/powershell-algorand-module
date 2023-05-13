@@ -9,7 +9,7 @@ variables:
   moduleName: 'Algorand'
   guid: '770fd246-4dff-4ce4-9550-6451d8e33ae2'
   majorVersion: '1'
-  minorVersion: '1'
+  minorVersion: '2'
   prerelease: ''
 
 pool:

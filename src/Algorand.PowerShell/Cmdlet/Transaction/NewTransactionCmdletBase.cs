@@ -52,7 +52,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			result.GenesisHash = GetGenesisHash(txParams);
 			result.LastValid = LastValid.GetValueOrDefault(txParams.LastRound + 1000);
 			result.Sender = Sender;
-			result.GenesisID = GetGenesisId(txParams);
+			result.GenesisId = GetGenesisId(txParams);
 			result.Note = GetNote();
 
 			if (Group != null) {

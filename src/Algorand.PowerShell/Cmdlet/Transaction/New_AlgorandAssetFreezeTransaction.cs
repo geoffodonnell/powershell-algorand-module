@@ -21,7 +21,7 @@ namespace Algorand.PowerShell.Cmdlet.Transaction {
 			var result = CreateTransaction();
 
 			result.FreezeTarget = FreezeAccount;
-			result.AssetFreezeID = FreezeAsset.GetValueOrDefault(0);
+			result.AssetFreezeId = FreezeAsset.GetValueOrDefault(0);
 			result.FreezeState = AssetFrozen.GetValueOrDefault(false);
 
 			WriteObject(result);
