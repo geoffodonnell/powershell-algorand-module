@@ -142,15 +142,16 @@ Find-AlgorandAccount
 ```
 
 # Build
+
 ## Prerequisites
-* .NET 6 SDK
-* PowerShell 7.2
+* .NET 8 SDK
+* PowerShell 7.4
 
 ## Local
 Clone this repository and execute `build-and-load-local.ps1` in a PowerShell window to build the module and import it into the current session. By default, when building locally the module is named `Algorand.Local`.
 
 ## Pipelines
-powershell-algorand-module build pipelines use the [Assembly Info Task](https://github.com/BMuuN/vsts-assemblyinfo-task) extension.
+powershell-outauth-module build pipelines use GitHub Actions workflows.
 
 # License
 powershell-algorand-module is licensed under a MIT license except for the exceptions listed below. See the LICENSE file for details.
