@@ -7,8 +7,8 @@ Param(
     [string]$ModuleName = "Algorand"
 )
 
-# Test node
-Invoke-WebRequest -Uri "https://testnet-api.algonode.cloud/" -Verbose
+# Switch network
+Switch-AlgorandNetwork -Network Testnet -Verbose
 
 $amount = 1000
 $account01 = New-AlgorandAccount -Name "test-account-01" -Network Testnet -Mnemonic $Account01Mnemonic
@@ -19,8 +19,6 @@ Write-Verbose -Message "account02 '$($account02.Address)'."
 
 # Get the sender account information
 $info = Get-AlgorandAccountInfo -Address $account01.Address
-
-Write-Output $info
 
 Write-Verbose -Message "account01 balance '$($info.Amount)'."
 
