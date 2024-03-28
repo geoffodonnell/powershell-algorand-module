@@ -20,6 +20,8 @@ Write-Verbose -Message "account02 '$($account02.Address)'."
 # Get the sender account information
 $info = Get-AlgorandAccountInfo -Address $account01.Address
 
+Write-Output $info
+
 Write-Verbose -Message "account01 balance '$($info.Amount)'."
 
 # Create the payment transaction
