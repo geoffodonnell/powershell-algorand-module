@@ -7,6 +7,9 @@ Param(
     [string]$ModuleName = "Algorand"
 )
 
+# Test node
+Invoke-WebRequest -Uri "https://testnet-api.algonode.cloud/" -Verbose
+
 $amount = 1000
 $account01 = New-AlgorandAccount -Name "test-account-01" -Network Testnet -Mnemonic $Account01Mnemonic
 $account02 = New-AlgorandAccount -Name "test-account-02" -Network Testnet -Mnemonic $Account02Mnemonic
