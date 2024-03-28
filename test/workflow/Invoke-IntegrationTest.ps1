@@ -11,6 +11,9 @@ $amount = 1000
 $account01 = New-AlgorandAccount -Name "test-account-01" -Network Testnet -Mnemonic $Account01Mnemonic
 $account02 = New-AlgorandAccount -Name "test-account-02" -Network Testnet -Mnemonic $Account02Mnemonic
 
+Write-Verbose -Message "account01 '$($account01.Address)'."
+Write-Verbose -Message "account02 '$($account02.Address)'."
+
 # Get the sender account information
 $info = Get-AlgorandAccountInfo -Address $account01
 
