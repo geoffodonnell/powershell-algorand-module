@@ -1,7 +1,7 @@
 # powershell-algorand-module
-[![Dev CI](https://dev.azure.com/gbo-devops/github-pipelines/_apis/build/status/Algorand.PowerShell/Algorand.PowerShell%20Dev%20CI?branchName=develop)](https://dev.azure.com/gbo-devops/github-pipelines/_build/latest?definitionId=13&branchName=develop)
+[![CI/CD](https://github.com/geoffodonnell/powershell-algorand-module/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/geoffodonnell/powershell-algorand-module/actions/workflows/ci-cd.yml)
 [![PSGallery version](https://img.shields.io/powershellgallery/v/Algorand?include_prereleases)](https://www.powershellgallery.com/packages/Algorand)
-[![Donate Algo](https://img.shields.io/badge/Donate-ALGO-000000.svg?style=flat)](https://algoexplorer.io/address/EJMR773OGLFAJY5L2BCZKNA5PXLDJOWJK4ED4XDYTYH57CG3JMGQGI25DQ)
+[![Donate Algo](https://img.shields.io/badge/Donate-ALGO-000000.svg?style=flat)](https://explorer.perawallet.app/address/EJMR773OGLFAJY5L2BCZKNA5PXLDJOWJK4ED4XDYTYH57CG3JMGQGI25DQ/)
 
 # Overview
 This PowerShell module provides tools for the Algorand blockchain.
@@ -113,7 +113,7 @@ PS> Get-AlgorandAccount | Get-AlgorandAccountInfo | Select -ExpandProperty Asset
 
 ### Send a payment transaction
 ```PowerShell
-PS> $sender = Get-AlgorandAccount
+PS> $sender = Get-AlgorandAccount -GetAll | Select-Object -First 1
 PS> $receiver = "ZZ6Z5YKFYOEINYKVID4HNJCM23OWAP5UP6IRTE4YPY27VMXPDJHMVAWUAY"
 PS> $amount = 3000
 
