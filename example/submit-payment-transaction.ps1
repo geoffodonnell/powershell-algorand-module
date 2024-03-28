@@ -45,16 +45,16 @@ param (
     [ulong] $Amount = 0
 )
 
-$network = Get-AlgorandNetwork
+$network = Get-AlgorandNetwork | Select-Object -ExpandProperty "GenesisId"
 
-if ($network -ne "testnet"){
+if ($network -ne "testnet-v1.0") {
     Write-Error -Message "This example is meant for testnet."
     return;
 }
 
 # If necessary, get the default account
 if (-not $Sender) {
-    $Sender = Get-AlgorandAccount
+    $Sender = Get-AlgorandAccount -GetAll | Select-Object -First 1
 }
 
 # Get the sender account information

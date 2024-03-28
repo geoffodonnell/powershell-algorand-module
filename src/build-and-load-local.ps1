@@ -1,17 +1,17 @@
 [CmdletBinding()]
 param (
-    [Parameter(Position = 0, mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false)]
     [string] $Configuration = "Debug",
-    [Parameter(Position = 1, mandatory = $false)]
+    [Parameter(Position = 1, Mandatory = $false)]
     [string] $ModuleName = "Algorand.Local",
-    [Parameter(Position = 2, mandatory = $false)]
+    [Parameter(Position = 2, Mandatory = $false)]
     [string] $Prerelease = "dev"
 )
 
 function Get-FullPath {
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, mandatory = $true)]
+        [Parameter(Position = 0, Mandatory = $false)]
         [string] $RelativePath = "Debug"
     )
     $pathSeparator = [System.IO.Path]::DirectorySeparatorChar
@@ -33,7 +33,7 @@ if (Test-Path -Path "$buildOutputPath" -ErrorAction SilentlyContinue) {
 }
 
 ## Build
-dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildOutputPath" --no-self-contained
+dotnet publish "$projectPath" --configuration "$Configuration" --output "$buildOutputPath" --no-self-contained /p:FileVersion="1.0.0"
 
 ## Create the module manifest
 Invoke-Expression "$createModuleManifest -Path '$buildOutputPath' -Guid $guid -Prerelease '$Prerelease'"

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -15,7 +15,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 		<PackageReference Include="pt.KeePassLibStd" Version="2.50.0.4849" />
-		<PackageReference Include="System.Management.Automation" Version="7.0.0" />
+		<PackageReference Include="SkiaSharp" Version="2.88.7" />
+		<PackageReference Include="System.Management.Automation" Version="7.4.1" />
   </ItemGroup>
 
   <ItemGroup>

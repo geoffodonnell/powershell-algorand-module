@@ -16,7 +16,7 @@ if (-not (Test-Path -Path $Path -ErrorAction SilentlyContinue)){
 $author = "Geoff O'Donnell"
 $rootModule = "Algorand.PowerShell.dll"
 
-$name = Get-Item -Path $Path | Select -ExpandProperty Name
+$name = Get-Item -Path $Path | Select-Object -ExpandProperty Name
 $moduleName = "$($name).psd1";
 $modulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $Path -ChildPath $moduleName))
 
@@ -35,7 +35,7 @@ $newModuleManifestArgs = @{
     LicenseUri              = "https://raw.githubusercontent.com/geoffodonnell/powershell-algorand-module/main/LICENSE"
     ModuleVersion           = $version
     Path                    = $modulePath
-    PowerShellVersion       = "7.2" # Require .NET 6.0
+    PowerShellVersion       = "7.4" # Require .NET 8.0
     ProjectUri              = "https://github.com/geoffodonnell/powershell-algorand-module"
     RootModule              = $rootModule
 }

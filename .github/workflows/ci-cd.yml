@@ -1,0 +1,221 @@
+# SEE: https://learn.microsoft.com/en-us/dotnet/standard/library-guidance/versioning
+# SEE: https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+# SEE: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+name: CI/CD
+on:
+  push:
+    branches:
+      - 'main'
+      - 'develop'
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
+env:
+    buildConfiguration: 'Release'
+    moduleName: 'Algorand'
+    guid: 'c66dcc66-564b-45c8-8406-bac225fcdf02'
+    artifactName: 'module-archive'
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup dotnet
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '8.0.x'
+        - name: Set version info
+          shell: pwsh
+          run: |-
+            $version = "${{ github.ref_name }}"
+            $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z]+)?"
+
+            if ($result.Matches.Success) {
+                $majorVersion = $result.Matches.Groups[1].Value
+                $minorVersion = $result.Matches.Groups[2].Value
+                $buildVersion = $result.Matches.Groups[3].Value
+
+                if ($result.Matches.Groups.Length -eq 6) {
+                    $prerelease = $result.Matches.Groups[5].Value
+                }
+            } else {
+                $majorVersion = 0
+                $minorVersion = 0
+                $buildVersion = 0
+            }
+
+            # https://www.jamescroft.co.uk/setting-github-actions-environment-variables-in-powershell/
+            echo "majorVersion=$majorVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+            echo "minorVersion=$minorVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+            echo "buildVersion=$buildVersion" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+            echo "prerelease=$prerelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        - name: Execute unit tests
+          run: >
+            dotnet test test/${{ env.moduleName }}.PowerShell.UnitTest/${{ env.moduleName }}.PowerShell.UnitTest.csproj
+            --configuration ${{ env.buildConfiguration }}
+        - name: Build module
+          run: >
+            dotnet publish src/${{ env.moduleName }}.PowerShell/${{ env.moduleName }}.PowerShell.csproj 
+            --configuration ${{ env.buildConfiguration }} 
+            --output ${{ runner.temp }}/${{ env.moduleName }} 
+            --no-self-contained
+            /p:Version="${{ env.majorVersion }}.${{ env.minorVersion }}.${{ env.buildVersion }}"
+            /p:FileVersion="${{ env.majorVersion }}.${{ env.minorVersion }}.${{ env.buildVersion }}"
+            /p:AssemblyVersion="${{ env.majorVersion }}.0.0"
+            /p:InformationalVersion="${{ env.majorVersion }}.${{ env.minorVersion }}.${{ env.buildVersion }}+${{ github.sha }}"
+        - name: Arrange native assemblies
+          shell: pwsh
+          run: |-
+            $buildOutputPath = "${{ runner.temp }}/${{ env.moduleName }}"
+            $runtimesPath = Join-Path -Path $buildOutputPath -ChildPath "runtimes"
+
+            Get-ChildItem -Path $runtimesPath | ForEach-Object {
+
+                $target = New-Item -ItemType Directory -Path $buildOutputPath -Name $_.Name
+
+                Get-ChildItem -Path (Join-Path -Path $_.FullName -ChildPath "native") | ForEach-Object {
+                    Move-Item -Path $_.FullName -Destination $target
+                }
+
+                if ($_.Name -eq 'osx') {
+                    Get-ChildItem -Path $target | Copy-Item -Destination $buildOutputPath
+                }
+            }
+
+            Remove-Item -Path $runtimesPath -Recurse -Force
+        - name: 'Create module manifest' 
+          shell: pwsh
+          run: >
+            ./src/create-module-manifest.ps1
+            -Path "${{ runner.temp }}/${{ env.moduleName }}"
+            -Prerelease "${{ env.prerelease }}"
+            -Guid "${{ env.guid }}"
+        - name: Upload module artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ env.artifactName }}
+            path: "${{ runner.temp }}/${{ env.moduleName }}/"
+    test-osx:
+        name: macOS Test
+        runs-on: macos-latest
+        needs: build
+        permissions:
+            actions: read
+        steps:
+            - uses: actions/checkout@v4
+            - name: Download module artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: ${{ env.artifactName }}
+                path: ${{ runner.temp }}/${{ env.moduleName }}
+            - name: Invoke integration test
+              shell: pwsh
+              run: |-
+                Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+    test-ubuntu:
+        name: Ubuntu Test
+        runs-on: ubuntu-latest
+        needs: build
+        permissions:
+            actions: read
+        steps:
+            - uses: actions/checkout@v4
+            - name: Download module artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: ${{ env.artifactName }}
+                path: ${{ runner.temp }}/${{ env.moduleName }}
+            - name: Invoke integration test
+              shell: pwsh
+              run: |-
+                Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+    test-windows:
+        name: Windows Test
+        runs-on: windows-latest
+        needs: build
+        permissions:
+            actions: read
+        steps:
+            - uses: actions/checkout@v4
+            - name: Download module artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: ${{ env.artifactName }}
+                path: ${{ runner.temp }}/${{ env.moduleName }}
+            - name: Invoke integration test
+              shell: pwsh
+              run: |-
+                Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+    publish:
+        name: Publish
+        runs-on: ubuntu-latest
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        needs: [test-osx, test-ubuntu, test-windows]
+        permissions:
+            actions: read
+            packages: write
+        steps:
+          - name: Download module artifacts
+            uses: actions/download-artifact@v4
+            with:
+              name: ${{ env.artifactName }}
+              path: ${{ runner.temp }}/${{ env.moduleName }}
+          - name: Set prelease value
+            shell: pwsh
+            run: |-
+              $version = "${{ github.ref_name }}"
+              $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z]+)?"
+
+              if ($result.Matches.Success -and $result.Matches.Groups.Length -eq 6) {
+                $prerelease = $result.Matches.Groups[5].Value
+              }
+              # https://www.jamescroft.co.uk/setting-github-actions-environment-variables-in-powershell/
+              echo "prerelease=$prerelease" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+          - name: Publish module to GitHub
+            shell: pwsh
+            run: |-
+                $user = "${{ github.actor }}"
+                $token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText -Force
+                $creds = New-Object System.Management.Automation.PSCredential -ArgumentList @($user, $token)
+                $feed = "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+                $moduleName = "${{ env.moduleName }}"
+                $repositoryName = "PowershellNugetServices"
+                
+                $dropPath = "${{ runner.temp }}"
+                $modulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $dropPath -ChildPath $moduleName))
+                
+                ## Force TLS1.2
+                [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                
+                ## Register repository
+                $registerArgs = @{
+                    Name = $repositoryName
+                    SourceLocation = $feed
+                    PublishLocation = $feed
+                    InstallationPolicy = 'Trusted'
+                    Credential = $creds
+                }
+                
+                Register-PSRepository @registerArgs
+                
+                ## Test
+                Get-PackageSource
+                
+                Publish-Module -Path $modulePath -Repository $repositoryName -NuGetApiKey "${{ github.token }}"
+          - name: Publish module to PowerShell Gallery
+            if: ${{ env.prerelease == '' }}
+            shell: pwsh
+            run: |-                
+                $dropPath = "${{ runner.temp }}"
+                $moduleName = "${{ env.moduleName }}"
+                $modulePath = [System.IO.Path]::GetFullPath((Join-Path -Path $dropPath -ChildPath $moduleName))
+                
+                ## Force TLS1.2
+                [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                
+                ## Publish to PSGallery
+                Publish-Module -Path "$modulePath" -Repository "PSGallery" -NuGetApiKey "${{ secrets.PSGALLERY_API_KEY }}"
