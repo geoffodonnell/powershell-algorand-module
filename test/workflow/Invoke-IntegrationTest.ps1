@@ -15,10 +15,15 @@ Write-Verbose -Message "account01 '$($account01.Address)'."
 Write-Verbose -Message "account02 '$($account02.Address)'."
 
 # Get the sender account information
-$info = Get-AlgorandAccountInfo -Address $account01
+$info = Get-AlgorandAccountInfo -Address $account01.Address
+
+Write-Verbose -Message "account01 balance '$($info.Amount)'."
 
 # Create the payment transaction
 $tx = New-AlgorandPaymentTransaction -Sender $account01 -Amount $amount -Receiver $account02.Address
+
+Write-Verbose -Message "tx amount '$($tx.Amount)'."
+Write-Verbose -Message "tx fee '$($tx.fee)'."
 
 # Ensure the sender account has enough to send.
 # This actually ignores the minimum balance required for opted-into assets
