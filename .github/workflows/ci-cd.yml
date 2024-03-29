@@ -29,7 +29,7 @@ jobs:
           shell: pwsh
           run: |-
             $version = "${{ github.ref_name }}"
-            $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z]+)?"
+            $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z0-9]+)?"
 
             if ($result.Matches.Success) {
                 $majorVersion = $result.Matches.Groups[1].Value
@@ -168,7 +168,7 @@ jobs:
             shell: pwsh
             run: |-
               $version = "${{ github.ref_name }}"
-              $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z]+)?"
+              $result = $version | Select-String -Pattern "v([0-9]+).([0-9]+).([0-9]+)(-)?([A-Za-z0-9]+)?"
 
               if ($result.Matches.Success -and $result.Matches.Groups.Length -eq 6) {
                 $prerelease = $result.Matches.Groups[5].Value
