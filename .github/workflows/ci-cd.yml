@@ -113,7 +113,7 @@ jobs:
               shell: pwsh
               run: |-
                 Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
-                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Amount 1001 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
     test-ubuntu:
         name: Ubuntu Test
         runs-on: ubuntu-latest
@@ -131,7 +131,7 @@ jobs:
               shell: pwsh
               run: |-
                 Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
-                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Amount 1002 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
     test-windows:
         name: Windows Test
         runs-on: windows-latest
@@ -149,7 +149,7 @@ jobs:
               shell: pwsh
               run: |-
                 Import-Module -Name "${{ runner.temp }}/${{ env.moduleName }}/${{ env.moduleName }}.psd1"
-                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
+                ${{ github.workspace }}/test/workflow/Invoke-IntegrationTest.ps1 -Amount 1003 -Account01Mnemonic "${{ secrets.ACCOUNT_01_MNEMONIC }}" -Account02Mnemonic "${{ secrets.ACCOUNT_02_MNEMONIC }}" -Verbose
     publish:
         name: Publish
         runs-on: ubuntu-latest

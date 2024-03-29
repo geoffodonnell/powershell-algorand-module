@@ -4,13 +4,14 @@ Param(
     [Parameter(Mandatory = $false, ValueFromPipeline = $false)]
     [string] $Account02Mnemonic,
     [Parameter(Mandatory = $false, ValueFromPipeline = $false)]
+    [int] $Amount = 1000,
+    [Parameter(Mandatory = $false, ValueFromPipeline = $false)]
     [string]$ModuleName = "Algorand"
 )
 
 # Switch network
 Switch-AlgorandNetwork -Network Testnet -Verbose
 
-$amount = 1000
 $account01 = New-AlgorandAccount -Name "test-account-01" -Network Testnet -Mnemonic $Account01Mnemonic
 $account02 = New-AlgorandAccount -Name "test-account-02" -Network Testnet -Mnemonic $Account02Mnemonic
 
@@ -23,7 +24,7 @@ $info = Get-AlgorandAccountInfo -Address $account01.Address
 Write-Verbose -Message "account01 balance '$($info.Amount)'."
 
 # Create the payment transaction
-$tx = New-AlgorandPaymentTransaction -Sender $account01 -Amount $amount -Receiver $account02.Address
+$tx = New-AlgorandPaymentTransaction -Sender $account01 -Amount $Amount -Receiver $account02.Address
 
 Write-Verbose -Message "tx amount '$($tx.Amount)'."
 Write-Verbose -Message "tx fee '$($tx.fee)'."
@@ -31,7 +32,7 @@ Write-Verbose -Message "tx fee '$($tx.fee)'."
 # Ensure the sender account has enough to send.
 # This actually ignores the minimum balance required for opted-into assets
 # and created assets/apps etc., it's mostly for the sake of demonstration.
-if ($info.Amount -le ($amount + $tx.fee)) {
+if ($info.Amount -le ($tx.Amount + $tx.fee)) {
     Write-Error -Message "Insufficent balance"
     exit 1;
 }
